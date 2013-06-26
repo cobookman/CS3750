@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Week</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="The week schedule">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favicon.png">
+    <!-- CUSTOM CSS -->
+    <style>
+      body {
+        background-color: #FFFFF0;
+      }
+      .employees {
+        background-color: red;
+        height: 500px;
+        float: left;
+      }
+      .week {
+        border: 1px solid black;
+        height: 500px;
+      }
+      .morning td, .evening td{
+/*        background-color: gray !important;
+*/      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+
+        <div class="employees span2">
+          <h3>Employees +</h3>
+          <ul id="draggable">
+            <ol>Colin Bookman</ol>
+            <ol>John Doe</ol>
+          </ul>
+        </div>
+
+        <table class="week span10 table table-striped">
+          <thead>
+            <tr>
+              <th>Shift</th>
+              <th>Sunday    <br/>6/16/2013</th>
+              <th>Monday    <br/>6/17/2013</th>
+              <th>Tuesday   <br/>6/18/2013</th>
+              <th>Wednesday <br/>6/19/2013</th>
+              <th>Thursday  <br/>6/20/2013</th>
+              <th>Friday    <br/>6/21/2013</th>
+              <th>Saturday  <br/>6/22/2013</th>
+            </tr>
+          </thead>
+          <tbody id="droppable">
+            <tr class="morning">
+              <td>Morning</td>
+              <td id="test">Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+            </tr>
+            <tr class="afternoon">
+              <td>Afternoon</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+            </tr>
+            <tr class="evening">
+              <td>Evening</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World</td>
+              <td>Hello World 134</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     <script src="http://code.jquery.com/jquery.js"></script>
+     <script src="js/bootstrap.min.js"></script>
+     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!-- Draggable Script -->
+     <script>
+      $(function() {
+        $( "#draggable ol" ).draggable({
+          appendTo: "body",
+          helper: "clone"
+        });
+        $("#droppable td" ).droppable({
+          activeClass: "ui-state-default",
+          hoverClass: "ui-state-hover",
+          accept: ":not(.ui-sortable-helper)",
+          drop: function( event, ui ) {
+            $( this ).find( ".placeholder" ).remove();
+            dropped(ui.draggable.text(), this.textContent); //Name , Cell
+          }
+        }).sortable({
+          items: "li:not(.placeholder)",
+          sort: function() {
+            // gets added unintentionally by droppable interacting with sortable
+            // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+            $( this ).removeClass( "ui-state-default" );
+          }
+        });
+      });
+
+      function dropped(name, cell) {
+          alert("Name: " + name + " Cell: " + cell);
+      }
+     </script>
+  </body>
+</html>
