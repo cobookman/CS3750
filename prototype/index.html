@@ -37,8 +37,37 @@
         height: 500px;
       }
       .morning td, .evening td{
-/*        background-color: gray !important;
-*/      }
+      }
+      #draggable, ol {
+        margin: 0px 0px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+      #draggable ol {
+        margin-bottom: 10px;
+        background-color: gray;
+        text-align: center;
+      }
+      .ui-draggable {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        background-color: blue;
+      }
+      .red-zone {
+        background-color: rgba(255, 105, 97, 0.5);
+      }
+      .yellow-zone {
+        background-color: rgba(255, 255, 187, 0.5);
+      }
+      .green-zone {
+        background-color: rgba(189,236,182, 0.5);
+      }
+      .hidden {
+        display: none;
+        background-color: green;
+        font-size: 100px;
+      }
+      
     </style>
   </head>
   <body>
@@ -48,12 +77,20 @@
         <div class="employees span2">
           <h3>Employees +</h3>
           <ul id="draggable">
-            <ol>Colin Bookman</ol>
-            <ol>John Doe</ol>
+            <ol class="tour captain">Colin Bookman</ol>
+            <ol class="tour captain">John Doe</ol>
+            <ol class="captain">Emp 1</ol>
+            <ol class="captain captain">John 2</ol>
+            <ol class="staff captain">John 3</ol>
+            <ol class="staff captain">John 4</ol>
+            <ol class="staff captain">John 5</ol>
+            <ol class="staff captain">John 6</ol>
+            <ol class="staff captain">John 7</ol>
+
           </ul>
         </div>
 
-        <table class="week span10 table table-striped">
+        <table class="week span10 table">
           <thead>
             <tr>
               <th>Shift</th>
@@ -67,35 +104,55 @@
             </tr>
           </thead>
           <tbody id="droppable">
-            <tr class="morning">
+            <tr id="morning">
               <td>Morning</td>
-              <td id="test">Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
+              <script>
+                for(var i = 0; i<7; i++) { 
+                  document.write(' \
+                    <td id="morning-'+i+'" class="red-zone"> \
+                      Need: \
+                      <ul> \
+                        <li><span class="tour">2</span> Tour Guides</li> \
+                        <li><span class="captain">2</span> Captains</li>  \
+                        <li><span class="staff">5</span> Staf</li> \
+                      </ul> \
+                    </td>');
+                }
+              </script>
             </tr>
-            <tr class="afternoon">
+            <script>
+            </script>
+            <tr id="afternoon">
               <td>Afternoon</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
+              <script>
+              for(var i = 0; i<7; i++) { 
+                document.write(' \
+                  <td id="afternoon-'+i+'" class="red-zone"> \
+                    Need: \
+                    <ul>  \
+                      <li><span class="tour">2</span> Tour Guides</li> \
+                      <li><span class="captain">2</span> Captains</li>  \
+                      <li><span class="staff">5</span> Staff</li> \
+                    </ul> \
+                  </td>');        
+              }
+              </script>
             </tr>
-            <tr class="evening">
+            <tr id="evening">
               <td>Evening</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World</td>
-              <td>Hello World 134</td>
+              <script>
+              for(var i = 0; i<7; i++) { 
+                document.write(' \
+                  <td id= "evening-'+i+'" class="red-zone"> \
+                    Need: \
+                    <ul>  \
+                      <li><span class="tour">2</span> Tour Guides</li> \
+                      <li><span class="captain">2</span> Captains</li>  \
+                      <li><span class="staff">5</span> Staff</li> \
+                    </ul> \
+                  </td>');        
+              }
+              </script>
             </tr>
           </tbody>
         </table>
@@ -110,6 +167,69 @@
      <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <!-- Draggable Script -->
      <script>
+     //Red = Not Meeting 
+     //Yellow = Just Meeting (all most be yellow)
+     //Green = All Good - Everything Meets and a few Exceeds (all yellow and a green somewhere)
+     //Checks for <=Red, >= Green, and the else
+      var requirements = {
+        "tour" : {
+          "red" : 1,
+          "yellow" : 2,
+          "green"  : 4
+        },
+        "captain" : {
+          "red" : 1,
+          "yellow" : 2,
+          "green"  : 2
+        },
+        "staff" : {
+          "red" : 4,
+          "yellow" : 5,
+          "green" : 7,
+        }
+      }
+
+      //which position to fill first
+      var positions = ["captain", "tour", "staff"];
+      //Data for each day
+      var daysofweek = ['sunday', 'monday', 'tuesday', 'wednesday' ,'thursday', 'friday', 'saturday'];
+      var scheduled = {
+        "sunday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "monday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "tuesday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "wednesday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "thursday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "friday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        },
+        "saturday" : {
+          "morning"   : {"tour": [], "captain" : [], "staff" : []},
+          "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+          "evening"   : {"tour": [], "captain" : [], "staff" : []}
+        }
+      }
       $(function() {
         $( "#draggable ol" ).draggable({
           appendTo: "body",
@@ -121,7 +241,7 @@
           accept: ":not(.ui-sortable-helper)",
           drop: function( event, ui ) {
             $( this ).find( ".placeholder" ).remove();
-            dropped(ui.draggable.text(), this.textContent); //Name , Cell
+            dropped(ui.draggable, this); //Name , Cell
           }
         }).sortable({
           items: "li:not(.placeholder)",
@@ -132,9 +252,72 @@
           }
         });
       });
-
+      var test;
       function dropped(name, cell) {
-          alert("Name: " + name + " Cell: " + cell);
+        //Find out day which dropped into
+        var time = cell.id.split('-');
+        var day = daysofweek[time[1]];
+        var period = time[0];
+        var selectedEmployee = name.text();
+
+        //See if already in the timeslot, assert Error
+        var currentlyScheduled = scheduled[day][period];
+        for(var i = 0; i<positions.length; i++) {
+          if(currentlyScheduled[positions[i]].indexOf(selectedEmployee) != -1) {
+              return error("EMPLOYEE ALREADY ADDED TO THIS TIMESLOT");
+          }
+        }
+
+        //Add Employee to Schedule       
+        var skills = name.attr('class').split(' ');
+        skills.pop(); //Remove ui-draggable (last class)
+
+        var chosenSkill = skills[0]; //TODO Smarter Skill assignment
+        //TODO FIX 1 Skillset per employee assumption
+        scheduled[day][period][chosenSkill].push(selectedEmployee); //Assuming employee only has 1 skil 
+        /////////////////////////////////////////////////
+        ///////////   UGLY SHOULD BE DO WHILE   /////////
+        /////////////////////////////////////////////////
+        //Decrement correct LI for adding slot
+        var cell_ul = cell.childNodes[1].childNodes;
+        test = cell_ul;
+        for(var i = 1; i<cell_ul.length; i+=2) {
+          var liElm = cell_ul[i];
+          if(liElm.childNodes[0].className  == chosenSkill) {
+            var spanElm = cell_ul[i].childNodes[0];
+            if(spanElm.innerHTML <= 1) { //Delete Node
+              liElm.className += "hidden";
+            } else { //Decrement counter
+              spanElm.innerHTML -= 1;
+            }
+            break; //Found our element, stop the loop
+          }
+        }
+
+        //Assign Correct Shading
+        var red = 0;  var yellow = 0; var green = 0;
+        for(var i =0; i<positions.length; i++) { 
+          var numStationed = scheduled[day][period][positions[i]].length;
+          if(numStationed <= requirements[positions[i]]["red"]) {
+            red++;
+          } else if(numStationed >= requirements[positions[i]]["green"]) {
+            green++;
+          } else {
+            yellow++;
+          }
+        }
+        //Shade Red
+        if(red > 0) {
+          alert("RED");
+        } else if(yellow > green) {
+          alert("Yellow");
+        } else {
+          alert("GREEN");
+        }
+
+      }
+      function error(error_message) {
+        alert(error_message);
       }
      </script>
   </body>
