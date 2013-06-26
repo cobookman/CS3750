@@ -28,13 +28,16 @@
         background-color: #FFFFF0;
       }
       .employees {
-        background-color: red;
-        height: 500px;
+        background-color: rgba(255, 248, 220, 0.5);
+        height: 550px;
         float: left;
       }
+      .employees > form > ul {
+        overflow-y: auto;
+        height: 470px;
+      }
       .week {
-        border: 1px solid black;
-        height: 500px;
+        height: 550px;
       }
       .morning td, .evening td{
       }
@@ -44,14 +47,20 @@
         padding-bottom: 15px;
       }
       #draggable ol {
+        width: 80%;
         margin-bottom: 10px;
-        background-color: gray;
+        margin-left: auto;
+        margin-right: auto;
         text-align: center;
+      }
+      #draggable ol, .ui-draggable {
+        background-color: rgba(12, 40, 73, 0.8);
+        color: white;
+        font-size: 1.2em;
       }
       .ui-draggable {
         padding-top: 15px;
         padding-bottom: 15px;
-        background-color: blue;
       }
       .red-zone {
         background-color: rgba(255, 105, 97, 0.5);
@@ -67,15 +76,61 @@
         background-color: green;
         font-size: 100px;
       }
+      .checkmark {
+        text-align: center !important;
+        vertical-align: middle !important;
+      }
+      td {
+        vertical-align: middle;
+        font-size: 0.82em;
+      }
+      td:first-child {
+        font-size: .9em;
+      }
+      .nav-top {
+        float: right;
+      }
+      .row {
+        margin-top: 40px;
+        height: 550px;
+
+      }
+      .week-wrapper {
+        vertical-align: middle;
+
+      }
+      .logout {
+        float: left;
+      }
+      #error-message {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 1.5em;
+      }
+
       
     </style>
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="row-fluid">
-
-        <div class="employees span2">
-          <h3>Employees +</h3>
+    <div class="container">
+      <div class="nav-top btn-group">
+        <a class="btn" href="week.html">Week</a>
+        <a class="btn" href="day.html">Day</a>
+        <a class="btn" href="gallery.html">Gallery</a>
+      </div>
+      <div class="logout">
+        <a class="btn" href="week.html">logout</a>
+      </div>
+      <div id="error-message">
+      </div>
+      <div class="row">
+        <div class="employees span3">
+          <form>
+            <fieldset>
+              <legend>Employees <a href="#POFILE-NOTIMPLEMENTED">+</a></legend>
+              <div style="margin: 0 auto; text-align: center:">
+              <input type="text" placeholder="Search" style="margin-left: 15px; margin-bottom: 3px;"></div>
+            </fieldset>
           <ul id="draggable">
             <ol class="tour captain">Colin Bookman</ol>
             <ol class="tour captain">John Doe</ol>
@@ -86,21 +141,22 @@
             <ol class="staff captain">John 5</ol>
             <ol class="staff captain">John 6</ol>
             <ol class="staff captain">John 7</ol>
-
           </ul>
+          </form>
         </div>
-
-        <table class="week span10 table">
+        <div class="week-wrapper span9">
+        <!-- Day List MODAL -->
+        <table class="week table">
           <thead>
             <tr>
               <th>Shift</th>
-              <th>Sunday    <br/>6/16/2013</th>
-              <th>Monday    <br/>6/17/2013</th>
-              <th>Tuesday   <br/>6/18/2013</th>
-              <th>Wednesday <br/>6/19/2013</th>
-              <th>Thursday  <br/>6/20/2013</th>
-              <th>Friday    <br/>6/21/2013</th>
-              <th>Saturday  <br/>6/22/2013</th>
+              <th onclick="list('sunday');">Sunday    <br/>6/16/2013</th>
+              <th onclick="list('monday');">Monday    <br/>6/17/2013</th>
+              <th onclick="list('tuesday');">Tuesday   <br/>6/18/2013</th>
+              <th onclick="list('wednesday');">Wednesday <br/>6/19/2013</th>
+              <th onclick="list('thursday');">Thursday  <br/>6/20/2013</th>
+              <th onclick="list('friday');">Friday    <br/>6/21/2013</th>
+              <th onclick="list('saturday');">Saturday  <br/>6/22/2013</th>
             </tr>
           </thead>
           <tbody id="droppable">
@@ -156,8 +212,22 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div> <!-- /container -->
+    <!-- LIST VIEW MODAL -->
+    <div id="list-view" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Modal header</h3>
+      </div>
+      <div id='list-body' class="modal-body">
+        <p>One fine body…</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
 
     <!-- Le javascript
     ================================================== -->
@@ -264,7 +334,7 @@
         var currentlyScheduled = scheduled[day][period];
         for(var i = 0; i<positions.length; i++) {
           if(currentlyScheduled[positions[i]].indexOf(selectedEmployee) != -1) {
-              return error("EMPLOYEE ALREADY ADDED TO THIS TIMESLOT");
+              return error(selectedEmployee + " was already added to " + day + " - " + period);
           }
         }
 
@@ -280,18 +350,26 @@
         /////////////////////////////////////////////////
         //Decrement correct LI for adding slot
         var cell_ul = cell.childNodes[1].childNodes;
-        test = cell_ul;
+        var hiddenCount = 0;
         for(var i = 1; i<cell_ul.length; i+=2) {
           var liElm = cell_ul[i];
           if(liElm.childNodes[0].className  == chosenSkill) {
             var spanElm = cell_ul[i].childNodes[0];
             if(spanElm.innerHTML <= 1) { //Delete Node
-              liElm.className += "hidden";
+              liElm.className += " hidden"; 
             } else { //Decrement counter
               spanElm.innerHTML -= 1;
             }
-            break; //Found our element, stop the loop
           }
+          if(liElm.className.indexOf('hidden') != -1) {
+            hiddenCount++;
+          }
+        }
+
+        //Check for 100% hidden elements, show checkmark
+        if(hiddenCount >=  positions.length) {
+          cell.innerHTML = '✔';
+          cell.className += ' checkmark';
         }
 
         //Assign Correct Shading
@@ -308,16 +386,32 @@
         }
         //Shade Red
         if(red > 0) {
-          alert("RED");
+          $(cell).removeClass("yellow-zone").removeClass("green-zone").addClass("red-zone");
         } else if(yellow > green) {
-          alert("Yellow");
+          $(cell).removeClass("red-zone").removeClass("green-zone").addClass("yellow-zone");
         } else {
-          alert("GREEN");
+          $(cell).removeClass("yellow-zone").removeClass("red-zone").addClass("green-zone");
+
         }
 
       }
       function error(error_message) {
-        alert(error_message);
+        var errorMSG = document.getElementById('error-message');
+        errorMSG.innerHTML = error_message;
+        setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
+      }
+      function list(day) {
+        $('#list-view > div > h3').text(day.charAt(0).toUpperCase() + day.substring(1));
+        var list = "";
+        for(var period in scheduled[day]) { 
+          list += '<h4>' + period + '</h4>';
+          for(var position in scheduled[day][period]) {
+            list += '<h5>' + position + '</h5>';
+            list += scheduled[day][period][position].toString().replace(',',' ');
+          }
+        }
+        $('#list-body').html(list);
+        $('#list-view').modal();
       }
      </script>
   </body>
