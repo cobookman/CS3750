@@ -114,8 +114,8 @@
   <body>
     <div class="container">
       <div class="nav-top btn-group">
-        <a class="btn" href="week.html">Week</a>
-        <a class="btn" href="day.html">Day</a>
+        <a class="btn btn-primary" href="index.html">Week</a>
+        <a class="btn" href="region.php">Region</a>
         <a class="btn" href="gallery.html">Gallery</a>
       </div>
       <div class="logout">
@@ -124,6 +124,9 @@
       <div id="error-message">
       </div>
       <div class="row">
+        <div style="text-align: center;" class="span12">
+          <button class="btn"><i class="icon-chevron-left"></i></button><span style="vertical-align: middle; margin-left: 8px; margin-right: 8px; font-size: 1.6em">6/16/2013 - 6/22/2013 </span><button class="btn"><i class="icon-chevron-right"></i></button>
+        </div>
         <div class="employees span3">
           <form>
             <fieldset>
@@ -219,7 +222,7 @@
     <div id="list-view" class="modal hide fade">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Modal header</h3>
+        <div style="text-align: center;"><button class="btn"><i class="icon-chevron-left"></i></button><span id="list-title" style="font-size: 1.8em; vertical-align: middle; margin-left: 10px; margin-right: 10px;">Modal header</span><button class="btn"><i class="icon-chevron-right"></i></button></div>
       </div>
       <div id='list-body' class="modal-body">
         <p>One fine body…</p>
@@ -401,7 +404,7 @@
         setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
       }
       function list(day) {
-        $('#list-view > div > h3').text(day.charAt(0).toUpperCase() + day.substring(1));
+        $('#list-title').text(day.charAt(0).toUpperCase() + day.substring(1));
         var list = "";
         for(var period in scheduled[day]) { 
           list += '<h4>' + period + '</h4>';

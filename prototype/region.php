@@ -1,0 +1,412 @@
+<?php
+	if(empty($_POST['day']) && empty($_POST['period'])) {
+		//Fix to be the current time
+		$day =  '6/16/2013';
+		$period = 'morning';
+	} else {
+		$day = $_POST['day'];
+		$period = $_POST['period'];
+	}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php echo "$day - $period"; ?> Region</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="The week schedule">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favicon.png">
+    <!-- CUSTOM CSS -->
+    <style>
+      body {
+        background-color: #FFFFF0;
+      }
+      .employees {
+        background-color: rgba(255, 248, 220, 0.5);
+        height: 550px;
+        float: left;
+      }
+      .employees > form > ul {
+        overflow-y: auto;
+        height: 470px;
+      }
+      .week {
+        height: 550px;
+      }
+      .morning td, .evening td{
+      }
+      #draggable, ol {
+        margin: 0px 0px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+      #draggable ol {
+        width: 80%;
+        margin-bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+      #draggable ol, .ui-draggable {
+        background-color: rgba(12, 40, 73, 0.8);
+        color: white;
+        font-size: 1.2em;
+      }
+      .ui-draggable {
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+      .red-zone {
+        background-color: rgba(255, 105, 97, 0.5);
+      }
+      .yellow-zone {
+        background-color: rgba(255, 255, 187, 0.5);
+      }
+      .green-zone {
+        background-color: rgba(189,236,182, 0.5);
+      }
+      .hidden {
+        display: none;
+        background-color: green;
+        font-size: 100px;
+      }
+      .checkmark {
+        text-align: center !important;
+        vertical-align: middle !important;
+      }
+      td {
+        vertical-align: middle;
+        font-size: 0.82em;
+      }
+      td:first-child {
+        font-size: .9em;
+      }
+      .nav-top {
+        float: right;
+      }
+      .row {
+        margin-top: 40px;
+        height: 550px;
+
+      }
+      .week-wrapper {
+        vertical-align: middle;
+      }
+      .logout {
+        float: left;
+      }
+      #error-message {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 1.5em;
+      }
+      .region {
+      	border: 1px solid rgb(221, 221, 221);
+      	padding-left: 20px;
+      	padding-right: 20px;
+      	padding-top: 8px;
+      	padding-bottom: 60px;
+      }
+      .region h3 {
+      	margin: 0px;
+      	margin-bottom: 5px;
+      }
+      #region-wrapper {
+      	overflow-y: auto;
+      	height:510px;
+      	margin-top: 40px;
+      }
+      .employee-list ol {
+		background-color: rgba(12, 40, 73, 0.8);
+        color: white;
+        font-size: 1.2em;
+        text-align: center;
+      	margin-bottom:10px;
+      }
+      .employee-list {
+      	margin: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav-top btn-group">
+        <a class="btn" href="index.html">Week</a>
+        <a class="btn btn-primary" href="region.php">Region</a>
+        <a class="btn" href="gallery.html">Gallery</a>
+      </div>
+      <div class="logout">
+        <a class="btn" href="week.html">logout</a>
+      </div>
+      <div id="error-message">
+      </div>
+      <div class="row">
+        <div style="text-align: center;" class="span12">
+          <button class="btn"><i class="icon-chevron-left"></i></button>
+          <span style="vertical-align: middle; margin-left: 8px; margin-right: 8px; font-size: 1.6em">
+          	<?php echo "$day - $period"; ?>
+          </span>
+          <button class="btn"><i class="icon-chevron-right"></i></button>
+        </div>
+        <div class="employees span3">
+          <form>
+            <fieldset>
+              <legend>Employees <a href="#POFILE-NOTIMPLEMENTED">+</a></legend>
+              <div style="margin: 0 auto; text-align: center:">
+              <input type="text" placeholder="Search" style="margin-left: 15px; margin-bottom: 3px;"></div>
+            </fieldset>
+          <ul id="draggable">
+            <ol class="tour captain">Colin Bookman</ol>
+            <ol class="tour captain">John Doe</ol>
+            <ol class="captain">Emp 1</ol>
+            <ol class="captain captain">John 2</ol>
+            <ol class="staff captain">John 3</ol>
+            <ol class="staff captain">John 4</ol>
+            <ol class="staff captain">John 5</ol>
+            <ol class="staff captain">John 6</ol>
+            <ol class="staff captain">John 7</ol>
+          </ul>
+          </form>
+       </div>
+       <div id="region-wrapper" class="span9">
+       	<div id="region1" class="span3 region">
+       	  <h3>Region 1</h3>
+       	  <ul class="employee-list">
+       	  	<ol>Hello</ol>
+			<ol>Hello</ol>
+       	  </ul>
+       	</div>
+	    <div id="region2" class="span3 region">
+		  <h3>Region 2</h3>
+       	  <ul class="employee-list">
+       	  	<ol>Hello</ol>
+			<ol>Hello</ol>
+       	  </ul>
+        </div>
+   	   </div>
+   	  </div>
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     <script src="http://code.jquery.com/jquery.js"></script>
+     <script src="js/bootstrap.min.js"></script>
+     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!-- Draggable Script -->
+     <script>
+     //Red = Not Meeting 
+     //Yellow = Just Meeting (all most be yellow)
+     //Green = All Good - Everything Meets and a few Exceeds (all yellow and a green somewhere)
+     //Checks for <=Red, >= Green, and the else
+      var requirements = {
+        "tour" : {
+          "red" : 1,
+          "yellow" : 2,
+          "green"  : 4
+        },
+        "captain" : {
+          "red" : 1,
+          "yellow" : 2,
+          "green"  : 2
+        },
+        "staff" : {
+          "red" : 4,
+          "yellow" : 5,
+          "green" : 7,
+        }
+      }
+
+      //which position to fill first
+      var positions = ["captain", "tour", "staff"];
+      //Draggable Init
+      $(function() {
+        $( "#draggable ol" ).draggable({
+          appendTo: "body",
+          helper: "clone"
+        });
+        $("#region-wrapper div" ).droppable({
+          activeClass: "ui-state-default",
+          hoverClass: "ui-state-hover",
+          accept: ":not(.ui-sortable-helper)",
+          drop: function( event, ui ) {
+            $( this ).find( ".placeholder" ).remove();
+            dropped(ui.draggable, this); //Name , Cell
+          }
+        }).sortable({
+          items: "li:not(.placeholder)",
+          sort: function() {
+            // gets added unintentionally by droppable interacting with sortable
+            // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+            $( this ).removeClass( "ui-state-default" );
+          }
+        });
+      });
+      function dropped(name, cell) {
+      	//Check if already in region
+      	var staffName = name.text();
+      	for(var i=1; i<cell.childNodes[3].childNodes.length; i++) {
+      		if(staffName == cell.childNodes[3].childNodes[i].textContent) {
+      			return error("Already added " + staffName + " to region " + cell.childNodes[1].textContent);
+      		}
+      	}
+
+      	//Add to region
+      	cell.childNodes[3].innerHTML +='<ol>' + name.text() + '</ol>';
+      	// alert("NAME: " + name.text() + "Cell: " + cell.id);
+      }
+
+      function error(error_message) {
+        var errorMSG = document.getElementById('error-message');
+        errorMSG.innerHTML = error_message;
+        setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
+      }
+      //Data for each day
+      // var daysofweek = ['sunday', 'monday', 'tuesday', 'wednesday' ,'thursday', 'friday', 'saturday'];
+      // var scheduled = {
+      //   "sunday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "monday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "tuesday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "wednesday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "thursday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "friday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   },
+      //   "saturday" : {
+      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
+      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
+      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
+      //   }
+      // }
+      // function dropped(name, cell) {
+      //   //Find out day which dropped into
+      //   var time = cell.id.split('-');
+      //   var day = daysofweek[time[1]];
+      //   var period = time[0];
+      //   var selectedEmployee = name.text();
+
+      //   //See if already in the timeslot, assert Error
+      //   var currentlyScheduled = scheduled[day][period];
+      //   for(var i = 0; i<positions.length; i++) {
+      //     if(currentlyScheduled[positions[i]].indexOf(selectedEmployee) != -1) {
+      //         return error(selectedEmployee + " was already added to " + day + " - " + period);
+      //     }
+      //   }
+
+      //   //Add Employee to Schedule       
+      //   var skills = name.attr('class').split(' ');
+      //   skills.pop(); //Remove ui-draggable (last class)
+
+      //   var chosenSkill = skills[0]; //TODO Smarter Skill assignment
+      //   //TODO FIX 1 Skillset per employee assumption
+      //   scheduled[day][period][chosenSkill].push(selectedEmployee); //Assuming employee only has 1 skil 
+      //   /////////////////////////////////////////////////
+      //   ///////////   UGLY SHOULD BE DO WHILE   /////////
+      //   /////////////////////////////////////////////////
+      //   //Decrement correct LI for adding slot
+      //   var cell_ul = cell.childNodes[1].childNodes;
+      //   var hiddenCount = 0;
+      //   for(var i = 1; i<cell_ul.length; i+=2) {
+      //     var liElm = cell_ul[i];
+      //     if(liElm.childNodes[0].className  == chosenSkill) {
+      //       var spanElm = cell_ul[i].childNodes[0];
+      //       if(spanElm.innerHTML <= 1) { //Delete Node
+      //         liElm.className += " hidden"; 
+      //       } else { //Decrement counter
+      //         spanElm.innerHTML -= 1;
+      //       }
+      //     }
+      //     if(liElm.className.indexOf('hidden') != -1) {
+      //       hiddenCount++;
+      //     }
+      //   }
+
+      //   //Check for 100% hidden elements, show checkmark
+      //   if(hiddenCount >=  positions.length) {
+      //     cell.innerHTML = '✔';
+      //     cell.className += ' checkmark';
+      //   }
+
+      //   //Assign Correct Shading
+      //   var red = 0;  var yellow = 0; var green = 0;
+      //   for(var i =0; i<positions.length; i++) { 
+      //     var numStationed = scheduled[day][period][positions[i]].length;
+      //     if(numStationed <= requirements[positions[i]]["red"]) {
+      //       red++;
+      //     } else if(numStationed >= requirements[positions[i]]["green"]) {
+      //       green++;
+      //     } else {
+      //       yellow++;
+      //     }
+      //   }
+      //   //Shade Red
+      //   if(red > 0) {
+      //     $(cell).removeClass("yellow-zone").removeClass("green-zone").addClass("red-zone");
+      //   } else if(yellow > green) {
+      //     $(cell).removeClass("red-zone").removeClass("green-zone").addClass("yellow-zone");
+      //   } else {
+      //     $(cell).removeClass("yellow-zone").removeClass("red-zone").addClass("green-zone");
+
+      //   }
+
+      // }
+      // function error(error_message) {
+      //   var errorMSG = document.getElementById('error-message');
+      //   errorMSG.innerHTML = error_message;
+      //   setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
+      // }
+      // function list(day) {
+      //   $('#list-title').text(day.charAt(0).toUpperCase() + day.substring(1));
+      //   var list = "";
+      //   for(var period in scheduled[day]) { 
+      //     list += '<h4>' + period + '</h4>';
+      //     for(var position in scheduled[day][period]) {
+      //       list += '<h5>' + position + '</h5>';
+      //       list += scheduled[day][period][position].toString().replace(',',' ');
+      //     }
+      //   }
+      //   $('#list-body').html(list);
+      //   $('#list-view').modal();
+      // }
+     </script>
+  </body>
+</html>
