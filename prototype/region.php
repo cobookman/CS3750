@@ -123,6 +123,8 @@
       	padding-right: 20px;
       	padding-top: 8px;
       	padding-bottom: 60px;
+      	max-height: 350px;
+      	overflow-y: auto;
       }
       .region h3 {
       	margin: 0px;
@@ -142,6 +144,15 @@
       }
       .employee-list {
       	margin: 0px;
+      }
+      .employee-list > ol > i {
+      	float: left;
+      	margin-right: -35px;
+      	margin-left: 10px;
+      	padding:5px;
+      }
+      .employee-list > ol > i:hover {
+      	background-image: url("img/glyphicons-halflings-white.png")
       }
     </style>
   </head>
@@ -168,7 +179,7 @@
         <div class="employees span3">
           <form>
             <fieldset>
-              <legend>Employees <a href="#POFILE-NOTIMPLEMENTED">+</a></legend>
+              <legend>Employees <a href="#POFILE-NOTIMPLEMENTED" style="font-size: 1.4em;">+</a></legend>
               <div style="margin: 0 auto; text-align: center:">
               <input type="text" placeholder="Search" style="margin-left: 15px; margin-bottom: 3px;"></div>
             </fieldset>
@@ -189,21 +200,51 @@
        	<div id="region1" class="span3 region">
        	  <h3>Region 1</h3>
        	  <ul class="employee-list">
-       	  	<ol>Hello</ol>
-			<ol>Hello</ol>
+       	  	<ol><i class="icon-remove" onclick="deleteItem('John', 'region1')"></i>John</ol>
+			<ol><i class="icon-remove" onclick="deleteItem('Dylan', 'region1')"></i>Dylan</ol>
        	  </ul>
        	</div>
 	    <div id="region2" class="span3 region">
 		  <h3>Region 2</h3>
        	  <ul class="employee-list">
-       	  	<ol>Hello</ol>
-			<ol>Hello</ol>
+       	  	<ol><i class="icon-remove" onclick="deleteItem('Colin', 'region2')"></i>Colin</ol>
+			<ol><i class="icon-remove" onclick="deleteItem('Bob', 'region2')"></i>Bob</ol>
        	  </ul>
         </div>
+        <section class="span6" style="margin-top:25px; margin-bottom: 25px;">
+ 		<a href="#new-region-modal" role="button" class="btn" data-toggle="modal">Add New Region</a>    
+		</section>
    	   </div>
    	  </div>
     </div> <!-- /container -->
 
+    <!-- Add new Region Modal -->
+    <div id="new-region-modal"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Add New Region" aria-hidden="true">
+      <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h3 id="myModalLabel">Add New Region</h3>
+	  </div>
+	  <div class="modal-body">
+	  	<fieldset>
+	  	  <legend>Add New Region</legend>
+	  	  <label>Region Name</label>
+	  	  <input id="regionName" type="text">
+	  	  <label class="radio">
+	  		<input type="radio" name="date-range" id="addToday"> Today Only?
+	  	  </label>
+	  	  <label class="radio">
+	  		<input type="radio" name="date-range" id="addWeek"> Entire Week?
+	  	  </label>
+	  	  <label class="radio">
+	  		<input type="radio" name="date-range" id="addForever"> Add Forever?
+	  	  </label>
+	  	</fieldset>
+	  </div>
+	  <div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button class="btn btn-primary" onclick="addRegion(); $('#new-region-modal').modal('toggle');">Add Region</button>
+	  </div>
+	</div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -259,9 +300,11 @@
           }
         });
       });
+      var test;
       function dropped(name, cell) {
       	//Check if already in region
       	var staffName = name.text();
+      	test = cell;
       	for(var i=1; i<cell.childNodes[3].childNodes.length; i++) {
       		if(staffName == cell.childNodes[3].childNodes[i].textContent) {
       			return error("Already added " + staffName + " to region " + cell.childNodes[1].textContent);
@@ -269,7 +312,7 @@
       	}
 
       	//Add to region
-      	cell.childNodes[3].innerHTML +='<ol>' + name.text() + '</ol>';
+      	cell.childNodes[3].innerHTML +='<ol><i class="icon-remove" onclick="deleteItem(\''+ name.text() + '\',\'' + cell.id + '\');"></i>' + name.text() + '</ol>';
       	// alert("NAME: " + name.text() + "Cell: " + cell.id);
       }
 
@@ -278,135 +321,36 @@
         errorMSG.innerHTML = error_message;
         setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
       }
-      //Data for each day
-      // var daysofweek = ['sunday', 'monday', 'tuesday', 'wednesday' ,'thursday', 'friday', 'saturday'];
-      // var scheduled = {
-      //   "sunday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "monday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "tuesday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "wednesday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "thursday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "friday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   },
-      //   "saturday" : {
-      //     "morning"   : {"tour": [], "captain" : [], "staff" : []},
-      //     "afternoon" : {"tour": [], "captain" : [], "staff" : []},
-      //     "evening"   : {"tour": [], "captain" : [], "staff" : []}
-      //   }
-      // }
-      // function dropped(name, cell) {
-      //   //Find out day which dropped into
-      //   var time = cell.id.split('-');
-      //   var day = daysofweek[time[1]];
-      //   var period = time[0];
-      //   var selectedEmployee = name.text();
-
-      //   //See if already in the timeslot, assert Error
-      //   var currentlyScheduled = scheduled[day][period];
-      //   for(var i = 0; i<positions.length; i++) {
-      //     if(currentlyScheduled[positions[i]].indexOf(selectedEmployee) != -1) {
-      //         return error(selectedEmployee + " was already added to " + day + " - " + period);
-      //     }
-      //   }
-
-      //   //Add Employee to Schedule       
-      //   var skills = name.attr('class').split(' ');
-      //   skills.pop(); //Remove ui-draggable (last class)
-
-      //   var chosenSkill = skills[0]; //TODO Smarter Skill assignment
-      //   //TODO FIX 1 Skillset per employee assumption
-      //   scheduled[day][period][chosenSkill].push(selectedEmployee); //Assuming employee only has 1 skil 
-      //   /////////////////////////////////////////////////
-      //   ///////////   UGLY SHOULD BE DO WHILE   /////////
-      //   /////////////////////////////////////////////////
-      //   //Decrement correct LI for adding slot
-      //   var cell_ul = cell.childNodes[1].childNodes;
-      //   var hiddenCount = 0;
-      //   for(var i = 1; i<cell_ul.length; i+=2) {
-      //     var liElm = cell_ul[i];
-      //     if(liElm.childNodes[0].className  == chosenSkill) {
-      //       var spanElm = cell_ul[i].childNodes[0];
-      //       if(spanElm.innerHTML <= 1) { //Delete Node
-      //         liElm.className += " hidden"; 
-      //       } else { //Decrement counter
-      //         spanElm.innerHTML -= 1;
-      //       }
-      //     }
-      //     if(liElm.className.indexOf('hidden') != -1) {
-      //       hiddenCount++;
-      //     }
-      //   }
-
-      //   //Check for 100% hidden elements, show checkmark
-      //   if(hiddenCount >=  positions.length) {
-      //     cell.innerHTML = '✔';
-      //     cell.className += ' checkmark';
-      //   }
-
-      //   //Assign Correct Shading
-      //   var red = 0;  var yellow = 0; var green = 0;
-      //   for(var i =0; i<positions.length; i++) { 
-      //     var numStationed = scheduled[day][period][positions[i]].length;
-      //     if(numStationed <= requirements[positions[i]]["red"]) {
-      //       red++;
-      //     } else if(numStationed >= requirements[positions[i]]["green"]) {
-      //       green++;
-      //     } else {
-      //       yellow++;
-      //     }
-      //   }
-      //   //Shade Red
-      //   if(red > 0) {
-      //     $(cell).removeClass("yellow-zone").removeClass("green-zone").addClass("red-zone");
-      //   } else if(yellow > green) {
-      //     $(cell).removeClass("red-zone").removeClass("green-zone").addClass("yellow-zone");
-      //   } else {
-      //     $(cell).removeClass("yellow-zone").removeClass("red-zone").addClass("green-zone");
-
-      //   }
-
-      // }
-      // function error(error_message) {
-      //   var errorMSG = document.getElementById('error-message');
-      //   errorMSG.innerHTML = error_message;
-      //   setTimeout(function() { errorMSG.innerHTML = ""; }, 2500);
-      // }
-      // function list(day) {
-      //   $('#list-title').text(day.charAt(0).toUpperCase() + day.substring(1));
-      //   var list = "";
-      //   for(var period in scheduled[day]) { 
-      //     list += '<h4>' + period + '</h4>';
-      //     for(var position in scheduled[day][period]) {
-      //       list += '<h5>' + position + '</h5>';
-      //       list += scheduled[day][period][position].toString().replace(',',' ');
-      //     }
-      //   }
-      //   $('#list-body').html(list);
-      //   $('#list-view').modal();
-      // }
+      function addRegion() {
+      	var regionName = $("#regionName").val();
+      	var regionID = regionName.replace(' ', '').replace('-','');
+      	//TODO - Add Error Handling for regions w/same name
+      	var regionHTML = '<div id="'+regionID+'" class="span3 region ui-droppable ui-sortable">\n<h3>'+regionName+'</h3>\n<ul class="employee-list">\n</ul>\n</div>';
+      	$("#region-wrapper div:last").after(regionHTML);
+      	$("#"+regionID).droppable({
+          activeClass: "ui-state-default",
+          hoverClass: "ui-state-hover",
+          accept: ":not(.ui-sortable-helper)",
+          drop: function( event, ui ) {
+            $( this ).find( ".placeholder" ).remove();
+            dropped(ui.draggable, this); //Name , Cell
+          }
+        }).sortable({
+          items: "li:not(.placeholder)",
+          sort: function() {
+            // gets added unintentionally by droppable interacting with sortable
+            // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+            $( this ).removeClass( "ui-state-default" );
+          }
+        });
+      }
+      function deleteItem(name, region) {
+	    $("#"+region+" > ul").children().each(function() {
+	      if(this.textContent == name) {
+	      	$(this).remove();
+	      }
+	    });
+      }
      </script>
   </body>
 </html>
