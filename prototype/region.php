@@ -131,8 +131,6 @@
       	margin-bottom: 5px;
       }
       #region-wrapper {
-      	overflow-y: auto;
-      	height:510px;
       	margin-top: 40px;
       }
       .employee-list ol {
