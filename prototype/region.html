@@ -2,15 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Week</title>
+    <title>Region</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="The week schedule">
+    <meta name="description" content="The Region Schedule">
+    <meta name="author" content="InkSchedule">
 
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
@@ -25,6 +25,13 @@
     <!-- CUSTOM CSS -->
     <style>
     /* Day Select */
+    #selected_date {
+      text-align: center;
+      margin: 0px 0px;
+    }
+    #employee-nav {
+      margin-top: -40px;
+    }
     #prev-day:hover, #prev-day:focus, #next-day:hover, #next-day:focus {
       color: rgb(0, 85, 128);
       text-decoration: none;
@@ -32,6 +39,8 @@
     #prev-day, #next-day {
       color: rgb(0, 136, 204);
       padding:3px;
+      font-size: 1.5em;
+      vertical-align: middle;
     }
     #day > h3 {
       text-align: center;
@@ -48,23 +57,22 @@
     #day > div > h4 {
       margin-left: 1em;
     }
-    #day > div > h4 > img {
+    img.settings {
       width: 20px;
       height: 20px;
       float: right;
       margin-right: 1em;
     }
-    #day > div > h4 > img:hover,  #day > div > h4 > img:focus {
+    img.settings:hover, img.settings:focus {
       background-color: rgba(0,0,0, 0.8);
     }
     .droppable {
       min-height: 125px;
     }
-    #day > #day-footer {
-      border: 0px;
-      text-align: center;
-      float: none;
-      clear: both;
+    #day-footer {
+      position: relative;
+      left: 31.5%;
+      border: 0 !important;
     }
 
 
@@ -85,6 +93,10 @@
       padding: 0;
       margin-left: 0;
     }
+    #employee-list {
+      max-height: 450px;
+      overflow: auto;
+    }
     .employees > ul > li, .dropped-list > li {
       background-color: rgb(12, 40, 73);
       color: rgb(237, 239, 242);
@@ -93,6 +105,10 @@
       margin-bottom: 4px;
       text-align: center;
       min-width: 150px;
+    }
+    /* Searchbar styling */
+    #search-bar {
+      width: 85%;
     }
     /* Employee list special to scheduled employees */
     .dropped-list {
@@ -113,48 +129,106 @@
       color: rgb(0, 85, 128);
       cursor: pointer;
     }
+    /* Table Styling */
+    td.success{ background-color: rgb(223, 240, 216); }
+    td.warning { background-color: rgb(252, 248, 227); }
+    td.error   { background-color: rgb(242, 222, 222); }
+    td.info    { background-color: rgb(217, 237, 247); }
+    .table-nav-day { background-color: rgba(0, 136, 204, 0.8);}
+    .table-nav-day:hover, .table-nav-day:focus { background-color: rgba(0, 85, 128, 0.7); }
     </style>
     <body>
     <div class="container">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <a class="brand" href=".">Ink</a>
+          <ul class="nav">
+            <li><a href="week.html">Week</a></li>
+            <li class="active"><a href="region.html">Region</a></li>
+            <li><a href="captain.html">Captain</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+
       <!-- Calendar -->
       <div class="row">
-        
+        <div class="span12">
+        <table class="table table-bordered table-condensed">
+            <tr>
+              <th onclick="changeDay(-1);" class="table-nav-day" rowspan="2">Sunday<br/>1/1/2013</th>
+              <th class="btn-primary" onclick="changeDay(0);">Monday 1/2/2013</th>
+              <th onclick="changeDay(1);">Tuesday 1/3/2013</th>
+              <th onclick="changeDay(2);">Wenesday 1/4/2013</th>
+              <th onclick="changeDay(3);">Thursday 1/5/2013</th>
+              <th onclick="changeDay(4);">Friday 1/6/2013</th>
+              <th onclick="changeDay(5);">Saturday 1/7/2013</th>
+              <th onclick="changeDay(6);">Sunday 1/8/2013</th>
+              <th onclick="changeDay(7);" class="table-nav-day" rowspan="2">Monday<br/>1/9/2013</th>
+            </tr>
+            <tr>
+              <td onclick="changeDay(0);" class="success">✔</td>
+              <td onclick="changeDay(1);" class="warning">x</td>
+              <td onclick="changeDay(2);" class="error">x</td>
+              <td onclick="changeDay(3);" class="info">x</td>
+              <td onclick="changeDay(4);" class="success">✔</td>
+              <td onclick="changeDay(5);" class="success">✔</td>
+              <td onclick="changeDay(6);" class="success">✔</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       </div>
       <!-- Main UI -->
       <div class="row">
-        <div class="span2 employees">
-          <h4>Employees <a href="#add-employee">+</a></h4>
+        <h3 id="selected_date">
+          <a onclick="changeDay(-1);" href="#prev-day" id="prev-day">&lt;</a>
+           1/2/2013 - Morning
+          <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
+        </h3>
+        <div id="employee-nav" class="span2 employees">
+          <h4>Employees <a href="#add-employee" onclick="addEmployee();">+</a></h4>
+          <input id="search-bar" type="text" placeholder="search">
           <div class="horizontal-grey-line"></div>
           <ul id="employee-list">
             <li>Colin Bookman</li>
             <li>Bob Dylan</li>
             <li>James Tight</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
           </ul>
         </div>
+        
         <div id="day" class="offset2">
-          <h3>
-            <a href="#prev-day" id="prev-day">&lt;</a>
-            1/1/2013 
-            <a id="next-day" href="#next-day">&gt;</a>
-          </h3>
           <!-- Time Slots -->
-          <div id="morning" class="span3 droppable">
-            <h4>Morning <img onclick="settings('morning');" src="img/blue-cog.png"></img></h4> 
+          <div id="region1" class="span3 droppable">
+            <h4>Region 1 <img class="settings" onclick="settings('morning');" src="img/blue-cog.png"></img></h4> 
             <ul class="dropped-list"></ul>
           </div>
-          <div id="afternoon" class="span3 droppable">
-            <h4>Afternoon <img onclick="settings('afternoon');" src="img/blue-cog.png"></img></h4> 
+          <div id="region2" class="span3 droppable">
+            <h4>Region 2 <img class="settings" onclick="settings('afternoon');" src="img/blue-cog.png"></img></h4> 
             <ul class="dropped-list"></ul>
           </div>
-          <div id="evening" class="span3 droppable">
-            <h4>Evening <img onclick="settings('evening');" src="img/blue-cog.png"></img></h4> 
+          <div id="region3" class="span3 droppable">
+            <h4>Region 3 <img class="settings" onclick="settings('evening');" src="img/blue-cog.png"></img></h4> 
             <ul class="dropped-list"></ul>
           </div>
-          <!-- End Time Slots -->
+          <!-- END TIMESLOTS -->
           <div id="day-footer">
-            <button class="btn btn-primary">Add New Timeslot</button>
+            <button onclick="addRegion();" class="btn btn-primary">Add New Region</button>
           </div>
         </div>
+   
       </div>
     </div>
      <!-- Le javascript
@@ -164,6 +238,32 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script>
+    var curr_date = new Date(2013, 0, 2);
+    //PROTOTYPES
+    function settings(location) {
+      alert("Not implemented, Received you want to get settings for: " + location);
+    }
+    function addRegion() {
+      alert("Registered your want to add a region, to-be implemented");
+    }
+    function changeDay(amount) {
+      //+1 = increase 1 day, -1 = decrease 1 day, -7 = decrease a week...etc 
+      var new_date = new Date(curr_date.getTime());
+      new_date.setDate(curr_date.getDate() + amount);
+      var day = new_date.getDate();
+      var month = new_date.getMonth() +1;
+      var year = new_date.getFullYear();
+      alert("Not implemented yet, you did select the following date: \n         " + month + "/" + day + "/" + year);
+      // alert("Realized you wanted to change the date by: " + new_date.getMonth() + "/" + new_date.getDate() + "/" + new_date.getFullYear() + " days");
+    }
+    function go2region(timeslot) {
+      alert("");
+    }
+    function addEmployee() {
+      alert("Not implemented yet - received Add Employee Action");
+    }
+
+
     var scheduled = {};
     function updateRegions(name, location) {
       //Make sure scheduled has each region in it
@@ -192,9 +292,7 @@
         }
       }
     }
-    function settings(location) {
-      alert("Not implemented, Received you want to get settings for: " + location);
-    }
+
     $(function() {
       //Drag Employees
       var $employees = $("#employee-list");
@@ -208,6 +306,7 @@
       });
       //Drop in the .droppable classes
       $(".droppable").droppable({
+        tolerance : "pointer",
         drop: function(event, ui) {
           var name = ui.draggable.text();
           var time = this.id;

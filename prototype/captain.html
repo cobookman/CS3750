@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Week</title>
+    <title>Captain</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The Week Schedule">
+    <meta name="description" content="The Captain schedule">
     <meta name="author" content="InkSchedule">
 
     <!-- Le styles -->
@@ -24,6 +24,11 @@
     <link rel="shortcut icon" href="ico/favicon.png">
     <!-- CUSTOM CSS -->
     <style>
+    /* Custom Day Border @OVERRIDE - Below*/
+    #timeslot > tbody > tr > td:hover, #timeslot > tbody > tr > td:hover {
+      border: 1px solid rgb(0, 85, 128);
+ 
+    }
     /* Day Select */
     #selected_date {
       text-align: center;
@@ -45,15 +50,16 @@
     #day > h3 {
       text-align: center;
     }
-    /* Times of Day Div Styling */
+    /* Times of Day Div Styling @OVERRIDE - Border*/
     #day > div {
-      border: 1px solid rgba(51, 51, 51, 0.15);
-      float: left;
+/*      border: 1px solid rgba(51, 51, 51, 0.15);
+*/      float: left;
       margin-bottom: 10px;
     }
+    /* @OVERRIDE */
     #day > div:hover, #day > div:focus {
-      border: 1px solid rgb(0, 85, 128);
-    }
+/*      border: 1px solid rgb(0, 85, 128);
+*/    }
     #day > div > h4 {
       margin-left: 1em;
     }
@@ -104,9 +110,9 @@
       padding: 8px 0;
       margin-bottom: 4px;
       text-align: center;
-      min-width: 150px;
-    }
-    /* Search */
+/*      min-width: 150px;
+*/    }
+    /* Searchbar styling */
     #search-bar {
       width: 85%;
     }
@@ -129,6 +135,11 @@
       color: rgb(0, 85, 128);
       cursor: pointer;
     }
+    .table-wrapper {
+      overflow-y: auto;
+      overflow-x: auto;
+      max-height: 506px;
+    }
     /* Table Styling */
     td.success{ background-color: rgb(223, 240, 216); }
     td.warning { background-color: rgb(252, 248, 227); }
@@ -143,9 +154,9 @@
         <div class="navbar-inner">
           <a class="brand" href=".">Ink</a>
           <ul class="nav">
-            <li class="active"><a href="week.html">Week</a></li>
+            <li><a href="week.html">Week</a></li>
             <li><a href="region.html">Region</a></li>
-            <li><a href="captain.html">Captain</a></li>
+            <li class="active"><a href="captain.html">Captain</a></li>
           </ul>
           <ul class="nav pull-right">
             <li><a href="#">Logout</a></li>
@@ -184,7 +195,7 @@
       <div class="row">
         <h3 id="selected_date">
           <a onclick="changeDay(-1);" href="#prev-day" id="prev-day">&lt;</a>
-           1/2/2013 
+           Region 1
           <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
         </h3>
         <div id="employee-nav" class="span2 employees">
@@ -195,7 +206,7 @@
             <li>Colin Bookman</li>
             <li>Bob Dylan</li>
             <li>James Tight</li>
-                  <li>Colin Bookman</li>
+            <li>Colin Bookman</li>
             <li>Colin Bookman</li>
             <li>Colin Bookman</li>
             <li>Colin Bookman</li>
@@ -210,22 +221,42 @@
         
         <div id="day" class="offset2">
           <!-- Time Slots -->
-          <div id="morning" class="span3 droppable">
-            <h4>Morning <img class="settings" onclick="settings('morning');" src="img/blue-cog.png"></img></h4> 
-            <ul class="dropped-list"></ul>
-          </div>
-          <div id="afternoon" class="span3 droppable">
-            <h4>Afternoon <img class="settings" onclick="settings('afternoon');" src="img/blue-cog.png"></img></h4> 
-            <ul class="dropped-list"></ul>
-          </div>
-          <div id="evening" class="span3 droppable">
-            <h4>Evening <img class="settings" onclick="settings('evening');" src="img/blue-cog.png"></img></h4> 
-            <ul class="dropped-list"></ul>
+          <div id="region1" class="span10 table-wrapper">
+            <table id="timeslot" class="table table-bordered">
+              <thead>
+                <tr id="position-header">
+                  <th>Monday<br/>1/2/2013</th>
+                  <th>River<br/>Scount</th>
+                  <th>Tropical<br/>Diver</th>
+                  <th>Dolphin<br/>Tales</th>
+                  <th>Other<br/>Position 1</th>
+                  <th>Other<br  />Position 2</th>
+                  <th>Other<br/>Position 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <script>
+                  //In Military time
+                  var start = 7;
+                  var end  = 20;
+                  var num_cols = document.getElementById('position-header').getElementsByTagName('th').length;                  
+                  var html = "";
+                  var time;
+                  for(var i = start; i<=end; i++) {
+                    if(i < 13) { time = i + "am"; } else { time = (i-12) + "pm"; }
+                    html = "<tr><td>" + time + "</td>";
+                    for(var j = 1; j < num_cols; j++) {
+                      html += '<td id="'+i+'-'+j+'" class="droppable"></td>';
+                    }
+                    document.write(html + "</tr>")
+                  }
+                </script>
+              </tbody>
+            </table>
           </div>
           <!-- END TIMESLOTS -->
           <div id="day-footer">
-            <button onclick="addRegion();" class="btn btn-primary">Add New Timeslot</button>
-          </div>
+            <button onclick="addRegion();" class="btn btn-primary">Add New Posotion</button>
         </div>
    
       </div>
@@ -281,17 +312,19 @@
         return false;
       }
     }
+    //@OVERRIDE
     function deleteItem(name, location) {
-      var parentUL = document.getElementById(location).getElementsByClassName('dropped-list')[0];
-      var scheduled_staff = parentUL.getElementsByTagName('li');
+      var cell = document.getElementById(location);
+      var scheduled_staff = cell.textContent.substring(1).split('x')
+      var children = cell.getElementsByTagName('span');
       for(var i = 0; i< scheduled_staff.length; i++) {
-        if(scheduled_staff[i].textContent.substring(1) == name) {
-          parentUL.removeChild(scheduled_staff[i]);
+        if(scheduled_staff[i] == name) {
+          cell.removeChild(children[i])
           scheduled[location].pop(name);
         }
       }
     }
-
+    //@OVERRIDE
     $(function() {
       //Drag Employees
       var $employees = $("#employee-list");
@@ -310,11 +343,11 @@
           var name = ui.draggable.text();
           var time = this.id;
           if(updateRegions(name, time)) { //Dont add if user already exists
-            var elementHTML = '<li><span onclick="deleteItem(\'' + name + '\', \''+ time + '\');">x</span>'+name+'</li>';
-            this.getElementsByTagName("ul")[0].innerHTML+= elementHTML;
+            var elementHTML = '<span><button onclick="deleteItem(\'' + name + '\', \''+ time + '\');">x</button>'+name+'<br/></span>';
+            this.innerHTML+= elementHTML;
           } else {
             //Shake div
-             $( "#"+time ).effect( "shake" );
+             $( "#timeslot" ).effect( "shake" );
           }
         }
       })
