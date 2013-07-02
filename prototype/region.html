@@ -57,6 +57,10 @@
     #day > div > h4 {
       margin-left: 1em;
     }
+    #day {
+      overflow-y: auto;
+      max-height: 485px;
+    }
     img.settings {
       width: 20px;
       height: 20px;
@@ -66,7 +70,7 @@
     img.settings:hover, img.settings:focus {
       background-color: rgba(0,0,0, 0.8);
     }
-    .droppable {
+    .region {
       min-height: 125px;
     }
     #day-footer {
@@ -88,7 +92,7 @@
       height: 1px;
       margin: 8px 0;
     }
-    .employees > ul, .dropped-list  {
+    .employees > ul, .droppable  {
       list-style-type: none;
       padding: 0;
       margin-left: 0;
@@ -97,7 +101,7 @@
       max-height: 450px;
       overflow: auto;
     }
-    .employees > ul > li, .dropped-list > li {
+    .employees > ul > li, .droppable > li {
       background-color: rgb(12, 40, 73);
       color: rgb(237, 239, 242);
       font-size: 1.2em;
@@ -111,21 +115,17 @@
       width: 85%;
     }
     /* Employee list special to scheduled employees */
-    .dropped-list {
-      padding-bottom: 30px;
-    }
-    .dropped-list > li > span {
+    .droppable > li > span {
       float: left;
       margin-left: 1em;
       margin-right: -1em;
-      vertical-align: middle;
       cursor: pointer;
       font-weight: bold;
       color: rgb(0, 136, 204);
       font-size: 1.25em;
       margin-top: -2px;
     }
-    .dropped-list > li > span:hover, .dropped-list > li > span:focus {
+    .droppable > li > span:hover, .droppable > li > span:focus {
       color: rgb(0, 85, 128);
       cursor: pointer;
     }
@@ -137,15 +137,33 @@
     .table-nav-day { background-color: rgba(0, 136, 204, 0.8);}
     .table-nav-day:hover, .table-nav-day:focus { background-color: rgba(0, 85, 128, 0.7); }
 
-    /* Required Styling */
-    .required {
+    /* Dotted Box - Droppables*/
+    .droppable { 
+      padding: 8px 0;
+      margin: 10px 10px 0px;
+    }
+    .droppable {
       border: 2px dashed rgba(51, 51, 51, 0.15);
+    }
+    .droppable > div {
       font-size: 1.2em;
       text-align: center;
-      color: rgba(51, 51, 51, 0.4);
-      padding: 8px 0;
-      margin: 10px 10px;
+      color: rgba(51, 51, 51, 0.4);  
+      margin-bottom: 5px; 
     }
+    .otherStaff {
+      padding: 10px 0 40px;
+      margin: 10px 10px 10px;
+    }
+    /*ul.otherStaff {
+      margin: 10px 10px 10px;
+      padding: 8px 0 40px;
+      vertical-align: top;
+      text-align: center;
+    }
+    ul.otherStaff > div {
+      margin-bottom: 6px;
+    }*/
     </style>
     <body>
     <div class="container">
@@ -221,57 +239,53 @@
         
         <div id="day" class="offset2">
           <!-- Time Slots -->
-          <div id="region1" class="span3 droppable">
+          <div id="region1" class="span3 region">
             <h4>Region 1 <img class="settings" onclick="settings('morning');" src="img/blue-cog.png"></img></h4> 
-            <div class="required captain">
-              Captain
-            </div>
-            <div class="required tour">
-              Tour Guide
-            </div>
-            <div class="required vip">
-              VIP
-            </div>
-            <div class="required vip">
-              VIP
-            </div>
-            <div class="required vip">
-              VIP
-            </div>
-            <ul class="dropped-list"></ul>
-          </div>
-          <div id="region2" class="span3 droppable">
-            <h4>Region 2 <img class="settings" onclick="settings('afternoon');" src="img/blue-cog.png"></img></h4> 
-            <div class="required captain">
-              Captain
-            </div>
-            <div class="required tour">
-              Tour Guide
-            </div>
-            <div class="required vip">
-              VIP
-            </div>
-            <div class="required touch">
-              Touch
-            </div>
-            <ul class="dropped-list">
+            <ul class="droppable captain">
+              <div>Captain</div>
+            </ul>
+            <ul class="droppable tour">
+              <div>Tour Guide</div>
+            </ul>
+            <ul class="droppable vip">
+              <div>VIP</div>
+            </ul>
+            <ul class="droppable otherStaff">
+              <div>Other Staff</div>
             </ul>
           </div>
-          <div id="region3" class="span3 droppable">
+          <div id="region2" class="span3 region">
+            <h4>Region 2 <img class="settings" onclick="settings('afternoon');" src="img/blue-cog.png"></img></h4> 
+            <ul class="droppable captain">
+              <div>Captain</div>
+            </ul>
+            <ul class="droppable tour">
+              <div>Tour Guide</div>
+            </ul>
+            <ul class="droppable vip">
+              <div>VIP</div>
+            </ul>
+            <ul class="droppable otherStaff">
+              <div>Other Staff</div>
+            </ul>
+          </div>
+          <div id="region3" class="span3 region">
             <h4>Region 3 <img class="settings" onclick="settings('evening');" src="img/blue-cog.png"></img></h4> 
-            <div class="required captain">
-              Captain
-            </div>
-            <div class="required tour">
-              Tour Guide
-            </div>
-            <div class="required vip">
-              VIP
-            </div>
-            <ul class="dropped-list"></ul>
+            <ul class="droppable captain">
+              <div>Captain</div>
+            </ul>
+            <ul class="droppable tour">
+              <div>Tour Guide</div>
+            </ul>
+            <ul class="droppable vip">
+              <div>VIP</div>
+            </ul>
+            <ul class="droppable otherStaff">
+              <div>Other Staff</div>
+            </ul>
           </div>
           <!-- END TIMESLOTS -->
-      </div>
+        </div>
       <div id="day-footer" class="span10">
             <button onclick="addRegion();" class="btn btn-primary">Add New Region</button>
       </div>
@@ -310,34 +324,61 @@
 
 
     var scheduled = {};
-    function updateRegions(name, location) {
-      //Make sure scheduled has each region in it
-      var all_locations = document.getElementsByClassName('droppable');
-      for(var i = 0; i<all_locations.length; i++) {
-        if(scheduled[all_locations[i].id] == undefined) {
+    function updateRegions(name, location, position) {
+      ///////////////////
+      ////    INIT   ////
+      ///////////////////
+      //INIT Regions - if any new
+      var locations_dom = document.getElementsByClassName('region');
+      for(var i = 0; i<locations_dom.length; i++) {
+         var curr_location = locations_dom[i].id;
+        if(scheduled[curr_location] == undefined) {
           //Add location as not already declared
-          scheduled[all_locations[i].id] = [];
+          scheduled[curr_location] = [];
+        }
+        
+        //INIT Positions for said Region - If any new
+        var positions_dom = locations_dom[i].getElementsByTagName('ul');
+        for(var j = 0; j<positions_dom.length; j++ ) {
+          var curr_pos = getRequiredPosition(positions_dom[j].getAttribute('class').split(' '));
+          if(curr_pos != undefined && scheduled[curr_location][curr_pos] == undefined) {
+            //Add position to scheduled, not declared
+            scheduled[locations_dom[i].id][curr_pos] = [];
+          }
         }
       }
+      ///////////////////
+      ////    ADD    ////
+      ///////////////////
       //Check if employee is in region true -> add, false --> return false
       if(scheduled[location].indexOf(name) < 0) {
-        scheduled[location].push(name);
+        scheduled[location].push(name); //Add to global name trakker
+        //Also add to specific region
+        if(position != undefined) scheduled[location][position].push(name);
         return true;
       } else {
         return false;
       }
     }
-    function deleteItem(name, location) {
-      var parentUL = document.getElementById(location).getElementsByClassName('dropped-list')[0];
-      var scheduled_staff = parentUL.getElementsByTagName('li');
-      for(var i = 0; i< scheduled_staff.length; i++) {
-        if(scheduled_staff[i].textContent.substring(1) == name) {
-          parentUL.removeChild(scheduled_staff[i]);
-          scheduled[location].pop(name);
+    function deleteItem(name, location, position) {
+      $("#" + location + "> ." + position + " li").each(function() {
+        if($(this).text().substring(1) == name) { 
+          $(this).remove(); //Remove from List
+          scheduled[location].remove(name);
+          if(position != undefined) scheduled[location][position].remove(name);
         }
-      }
+      }); 
     }
-
+    function getRequiredPosition(classList) {
+      var output = undefined;
+      for(var i = 0; i < classList.length; i++) {
+            if(classList[i] != 'droppable' && classList[i] != 'ui-droppable') {
+              output=classList[i];
+              break;
+            }
+      } 
+      return output;
+    }
     $(function() {
       //Drag Employees
       var $employees = $("#employee-list");
@@ -349,23 +390,34 @@
         cursor: "move",
         cursorAt: { left: -8 }
       });
-      //Drop in the .droppable classes
       $(".droppable").droppable({
         tolerance : "pointer",
         drop: function(event, ui) {
           var name = ui.draggable.text();
-          var time = this.id;
-          if(updateRegions(name, time)) { //Dont add if user already exists
-            var elementHTML = '<li><span onclick="deleteItem(\'' + name + '\', \''+ time + '\');">x</span>'+name+'</li>';
-            this.getElementsByTagName("ul")[0].innerHTML+= elementHTML;
+          var time = this.parentElement.id;
+          var position = getRequiredPosition(this.getAttribute('class').split(' '));
+
+          if(updateRegions(name, time, position)) { //add if user doesn't exist
+            var elementHTML = '<li><span onclick="deleteItem(\'' + name + '\', \''+ time + '\', \''+ position +'\');">x</span>'+name+'</li>';
+             this.innerHTML+= elementHTML;
           } else {
             //Shake div
-             $( "#"+time ).effect( "shake" );
+            $( "#"+time ).effect( "shake" );
           }
         }
-      })
-
+      });
     });
+    Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
     </script>
     </body>
 </html>

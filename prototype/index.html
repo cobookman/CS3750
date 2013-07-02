@@ -265,7 +265,7 @@
       for(var i = 0; i< scheduled_staff.length; i++) {
         if(scheduled_staff[i].textContent.substring(1) == name) {
           parentUL.removeChild(scheduled_staff[i]);
-          scheduled[location].pop(name);
+          scheduled[location].remove(name);
         }
       }
     }
@@ -296,8 +296,17 @@
           }
         }
       })
-
     });
+    Array.prototype.remove = function() {
+      var what, a = arguments, L = a.length, ax;
+      while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+          this.splice(ax, 1);
+        }
+      }
+      return this;
+    };
     </script>
     </body>
 </html>
