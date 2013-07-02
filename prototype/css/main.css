@@ -1,0 +1,107 @@
+/* Day Select */
+    #selected_date {
+      text-align: center;
+      margin: 0px 0px;
+    }
+    #employee-nav {
+      margin-top: -40px;
+    }
+    #prev-day:hover, #prev-day:focus, #next-day:hover, #next-day:focus {
+      color: rgb(0, 85, 128);
+      text-decoration: none;
+    }
+    #prev-day, #next-day {
+      color: rgb(0, 136, 204);
+      padding:3px;
+      font-size: 1.5em;
+      vertical-align: middle;
+    }
+    #day > h3 {
+      text-align: center;
+    }
+    /* Times of Day Div Styling */
+    #day > div {
+      border: 1px solid rgba(51, 51, 51, 0.15);
+      float: left;
+      margin-bottom: 10px;
+    }
+    #day > div:hover, #day > div:focus {
+      border: 1px solid rgb(0, 85, 128);
+    }
+    #day > div > h4 {
+      margin-left: 1em;
+    }
+    #day {
+      overflow-y: auto;
+      max-height: 485px;
+    }
+    div.settings {
+      background-image: url("img/settings-normal.png");
+      width: 19px; height: 20px;
+      float: right;
+      margin-right: 1em;
+    }
+    .settings:hover, .settings:focus {
+      background-image: url("img/settings-hover.png");
+      width: 19px; height: 20px;
+    }
+    .region {
+      min-height: 125px;
+    }
+    #day-footer {
+      position: relative;
+      left: 25.5%;
+      border: 0 !important;
+    }
+
+
+    /* Employee List Styling */
+    .employees {
+      min-width: 150px;
+    }
+    .employees > h4 > a:hover, .employees > h4 > a:focus {
+      text-decoration: none;
+    }
+    .horizontal-grey-line {
+      background-color: rgba(51, 51, 51, 0.3);
+      height: 1px;
+      margin: 8px 0;
+    }
+    .employees > ul, .droppable  {
+      list-style-type: none;
+      padding: 0;
+      margin-left: 0;
+    }
+    #employee-list {
+      max-height: 450px;
+      overflow: auto;
+    }
+    .employees > ul > li, .droppable > li {
+      background-color: rgb(12, 40, 73);
+      color: rgb(237, 239, 242);
+      font-size: 1.2em;
+      padding: 8px 0;
+      margin-bottom: 4px;
+      text-align: center;
+      min-width: 150px;
+    }
+    /* Searchbar styling */
+    #search-bar {
+      width: 85%;
+    }
+    /* Employee list special to scheduled employees */
+    .droppable > li > span {
+      float: left;
+      margin-left: 1em;
+      margin-right: -1em;
+      cursor: pointer;
+      font-weight: bold;
+      color: rgb(0, 136, 204);
+      font-size: 1.25em;
+      margin-top: -2px;
+    }
+    .droppable > li > span:hover, .droppable > li > span:focus {
+      color: rgb(0, 85, 128);
+      cursor: pointer;
+    }
+    /* 

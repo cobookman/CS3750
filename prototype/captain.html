@@ -147,6 +147,12 @@
     td.info    { background-color: rgb(217, 237, 247); }
     .table-nav-day { background-color: rgba(0, 136, 204, 0.8);}
     .table-nav-day:hover, .table-nav-day:focus { background-color: rgba(0, 85, 128, 0.7); }
+    .table td, .table th {
+      text-align: center;
+    }
+    #timeslot.table td { 
+      text-align: left;
+    }
     </style>
     <body>
     <div class="container">
@@ -180,13 +186,13 @@
             <th onclick="changeDay(7);" class="table-nav-day" rowspan="2">Monday<br/>1/9/2013</th>
           </tr>
           <tr>
-            <td onclick="changeDay(0);" class="success">✔</td>
-            <td onclick="changeDay(1);" class="warning">x</td>
-            <td onclick="changeDay(2);" class="error">x</td>
-            <td onclick="changeDay(3);" class="info">x</td>
-            <td onclick="changeDay(4);" class="success">✔</td>
-            <td onclick="changeDay(5);" class="success">✔</td>
-            <td onclick="changeDay(6);" class="success">✔</td>
+            <td onclick="changeDay(0);" class="success"><i class="icon-user"></i>11</td>
+            <td onclick="changeDay(1);" class="warning"><i class="icon-user"></i>9</td>
+            <td onclick="changeDay(2);" class="error"><i class="icon-user"></i>5</td>
+            <td onclick="changeDay(3);" class="info"><i class="icon-user"></i>10</td>
+            <td onclick="changeDay(4);" class="success"><i class="icon-user"></i>20</td>
+            <td onclick="changeDay(5);" class="success"><i class="icon-user"></i>18</td>
+            <td onclick="changeDay(6);" class="success"><i class="icon-user"></i>29</td>
           </tr>
         </table>
       </div>
