@@ -84,7 +84,7 @@
           <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
         </h3>
         <div id="employee-nav" class="span2 employees">
-          <h4>Employees <a href="#add-employee" onclick="addEmployee();">+</a></h4>
+          <h4>Employees <a href="#add-employee" onclick="newEmployee();">+</a></h4>
           <input id="search-bar" type="text" placeholder="search">
           <div class="horizontal-grey-line"></div>
           <ul id="employee-list">
@@ -162,129 +162,12 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script>
-    var curr_date = new Date(2013, 0, 2);
-    //PROTOTYPES
-    function settings(location) {
-      alert("Not implemented, Received you want to get settings for: " + location);
-    }
-    function addRegion() {
-      alert("Registered your want to add a region, to-be implemented");
-    }
-    function changeDay(amount) {
-      //+1 = increase 1 day, -1 = decrease 1 day, -7 = decrease a week...etc 
-      var new_date = new Date(curr_date.getTime());
-      new_date.setDate(curr_date.getDate() + amount);
-      var day = new_date.getDate();
-      var month = new_date.getMonth() +1;
-      var year = new_date.getFullYear();
-      alert("Not implemented yet, you did select the following date: \n         " + month + "/" + day + "/" + year);
-      // alert("Realized you wanted to change the date by: " + new_date.getMonth() + "/" + new_date.getDate() + "/" + new_date.getFullYear() + " days");
-    }
-    function go2region(timeslot) {
-      alert("");
-    }
-    function addEmployee() {
-      alert("Not implemented yet - received Add Employee Action");
-    }
-
-
-    var scheduled = {};
-    function updateRegions(name, location, position) {
-      ///////////////////
-      ////    INIT   ////
-      ///////////////////
-      //INIT Regions - if any new
-      var locations_dom = document.getElementsByClassName('region');
-      for(var i = 0; i<locations_dom.length; i++) {
-         var curr_location = locations_dom[i].id;
-        if(scheduled[curr_location] == undefined) {
-          //Add location as not already declared
-          scheduled[curr_location] = [];
-        }
-        
-        //INIT Positions for said Region - If any new
-        var positions_dom = locations_dom[i].getElementsByTagName('ul');
-        for(var j = 0; j<positions_dom.length; j++ ) {
-          var curr_pos = getRequiredPosition(positions_dom[j].getAttribute('class').split(' '));
-          if(curr_pos != undefined && scheduled[curr_location][curr_pos] == undefined) {
-            //Add position to scheduled, not declared
-            scheduled[locations_dom[i].id][curr_pos] = [];
-          }
-        }
-      }
-      ///////////////////
-      ////    ADD    ////
-      ///////////////////
-      //Check if employee is in region true -> add, false --> return false
-      if(scheduled[location].indexOf(name) < 0) {
-        scheduled[location].push(name); //Add to global name trakker
-        //Also add to specific region
-        if(position != undefined) scheduled[location][position].push(name);
-        return true;
-      } else {
-        return false;
-      }
-    }
-    function deleteItem(name, location, position) {
-      $("#" + location + "> ." + position + " li").each(function() {
-        if($(this).text().substring(1) == name) { 
-          $(this).remove(); //Remove from List
-          scheduled[location].remove(name);
-          if(position != undefined) scheduled[location][position].remove(name);
-        }
-      }); 
-    }
-    function getRequiredPosition(classList) {
-      var output = undefined;
-      for(var i = 0; i < classList.length; i++) {
-            if(classList[i] != 'droppable' && classList[i] != 'ui-droppable') {
-              output=classList[i];
-              break;
-            }
-      } 
-      return output;
-    }
-    $(function() {
-      //Drag Employees
-      var $employees = $("#employee-list");
-      $("li", $employees).draggable({
-        revert: "invalid",
-        containment: "document",
-        // appendTo: "body",
-        helper: "clone",
-        cursor: "move",
-        cursorAt: { left: -8 }
-      });
-      $(".droppable").droppable({
-        tolerance : "pointer",
-        drop: function(event, ui) {
-          var name = ui.draggable.text();
-          var time = this.parentElement.id;
-          var position = getRequiredPosition(this.getAttribute('class').split(' '));
-
-          if(updateRegions(name, time, position)) { //add if user doesn't exist
-            var elementHTML = '<li><span onclick="deleteItem(\'' + name + '\', \''+ time + '\', \''+ position +'\');">x</span>'+name+'</li>';
-             this.innerHTML+= elementHTML;
-          } else {
-            //Shake div
-            $( "#"+time ).effect( "shake" );
-          }
-        }
-      });
-    });
-    Array.prototype.remove = function() {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
-
+      var curr_date = new Date(2013, 0, 2);
+      initDraggable();
+      initDroppable();
     </script>
     </body>
 </html>

@@ -106,7 +106,7 @@
           <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
         </h3>
         <div id="employee-nav" class="span2 employees">
-          <h4>Employees <a href="#add-employee" onclick="addEmployee();">+</a></h4>
+          <h4>Employees <a href="#add-employee" onclick="newEmployee();">+</a></h4>
           <input id="search-bar" type="text" placeholder="search">
           <div class="horizontal-grey-line"></div>
           <ul id="employee-list">
@@ -170,105 +170,152 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script>
     var curr_date = new Date(2013, 0, 2);
-    //PROTOTYPES
-    function settings(location) {
-      alert("Not implemented, Received you want to get settings for: " + location);
-    }
-    function addRegion() {
-      alert("Registered your want to add a region, to-be implemented");
-    }
-    function changeDay(amount) {
-      //+1 = increase 1 day, -1 = decrease 1 day, -7 = decrease a week...etc 
-      var new_date = new Date(curr_date.getTime());
-      new_date.setDate(curr_date.getDate() + amount);
-      var day = new_date.getDate();
-      var month = new_date.getMonth() +1;
-      var year = new_date.getFullYear();
-      alert("Not implemented yet, you did select the following date: \n         " + month + "/" + day + "/" + year);
-      // alert("Realized you wanted to change the date by: " + new_date.getMonth() + "/" + new_date.getDate() + "/" + new_date.getFullYear() + " days");
-    }
-    function go2region(timeslot) {
-      alert("");
-    }
-    function addEmployee() {
-      alert("Not implemented yet - received Add Employee Action");
-    }
-
-
-    var scheduled = {};
-    function updateRegions(name, location) {
-      //Make sure scheduled has each region in it
-      var all_locations = document.getElementsByClassName('droppable');
-      for(var i = 0; i<all_locations.length; i++) {
-        if(scheduled[all_locations[i].id] == undefined) {
-          //Add location as not already declared
-          scheduled[all_locations[i].id] = [];
+    initDraggable();
+    /* OVERRIDES from global - Due to chart interface */
+     function updateRegions() {
+        var all_locations = document.getElementsByClassName('droppable');
+        for(var i = 0; i<all_locations.length; i++) {
+          if(scheduled[all_locations[i].id] == undefined) {
+            scheduled[all_locations[i].id] = [];
+          }
         }
       }
-      //Check if employee is in region true -> add, false --> return false
-      if(scheduled[location].indexOf(name) < 0) {
-        scheduled[location].push(name);
-        return true;
-      } else {
-        return false;
-      }
-    }
-    //@OVERRIDE
-    function deleteItem(name, location) {
-      var cell = document.getElementById(location);
-      var scheduled_staff = cell.textContent.substring(1).split('x')
-      var children = cell.getElementsByTagName('span');
-      for(var i = 0; i< scheduled_staff.length; i++) {
-        if(scheduled_staff[i] == name) {
-          cell.removeChild(children[i])
-          scheduled[location].remove(name);
+      function scheduleEmployee(name, location) {
+        if(scheduled[location].indexOf(name) < 0) {
+          scheduled[location].push(name);
+          return true;
+        } else {
+          return false;
         }
       }
-    }
-    //@OVERRIDE
-    $(function() {
-      //Drag Employees
-      var $employees = $("#employee-list");
-      $("li", $employees).draggable({
-        revert: "invalid",
-        containment: "document",
-        // appendTo: "body",
-        helper: "clone",
-        cursor: "move",
-        cursorAt: { left: -8 }
-      });
-      //Drop in the .droppable classes
+      function unscheduleEmployee(name, location) {
+        var cell = document.getElementById(location);
+        var scheduled_staff = cell.textContent.substring(1).split('x')
+        var children = cell.getElementsByTagName('span');
+        for(var i = 0; i< scheduled_staff.length; i++) {
+          if(scheduled_staff[i] == name) {
+            cell.removeChild(children[i])
+            scheduled[location].remove(name);
+          }
+        }
+      }
+      updateRegions();
       $(".droppable").droppable({
         tolerance : "pointer",
         drop: function(event, ui) {
           var name = ui.draggable.text();
           var time = this.id;
-          if(updateRegions(name, time)) { //Dont add if user already exists
-            var elementHTML = '<span><button onclick="deleteItem(\'' + name + '\', \''+ time + '\');">x</button>'+name+'<br/></span>';
+          if(scheduleEmployee(name, time)) { //Dont add if user already exists
+            var elementHTML = '<span><button onclick="unscheduleEmployee(\'' + name + '\', \''+ time + '\');">x</button>'+name+'<br/></span>';
             this.innerHTML+= elementHTML;
           } else {
             //Shake div
-             $( "#timeslot" ).effect( "shake" );
+            $( "#timeslot" ).effect( "shake" );
           }
         }
-      })
+      });
+     
+//     var curr_date = new Date(2013, 0, 2);
+//     //PROTOTYPES
+//     function settings(location) {
+//       alert("Not implemented, Received you want to get settings for: " + location);
+//     }
+//     function addRegion() {
+//       alert("Registered your want to add a region, to-be implemented");
+//     }
+//     function changeDay(amount) {
+//       //+1 = increase 1 day, -1 = decrease 1 day, -7 = decrease a week...etc 
+//       var new_date = new Date(curr_date.getTime());
+//       new_date.setDate(curr_date.getDate() + amount);
+//       var day = new_date.getDate();
+//       var month = new_date.getMonth() +1;
+//       var year = new_date.getFullYear();
+//       alert("Not implemented yet, you did select the following date: \n         " + month + "/" + day + "/" + year);
+//       // alert("Realized you wanted to change the date by: " + new_date.getMonth() + "/" + new_date.getDate() + "/" + new_date.getFullYear() + " days");
+//     }
+//     function go2region(timeslot) {
+//       alert("");
+//     }
+//     function addEmployee() {
+//       alert("Not implemented yet - received Add Employee Action");
+//     }
 
-    });
 
-    //Overrides to javascript itself
-    Array.prototype.remove = function() {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
+//     var scheduled = {};
+//     function updateRegions(name, location) {
+//       //Make sure scheduled has each region in it
+//       var all_locations = document.getElementsByClassName('droppable');
+//       for(var i = 0; i<all_locations.length; i++) {
+//         if(scheduled[all_locations[i].id] == undefined) {
+//           //Add location as not already declared
+//           scheduled[all_locations[i].id] = [];
+//         }
+//       }
+//       //Check if employee is in region true -> add, false --> return false
+//       if(scheduled[location].indexOf(name) < 0) {
+//         scheduled[location].push(name);
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     }
+//     //@OVERRIDE
+//     function deleteItem(name, location) {
+//       var cell = document.getElementById(location);
+//       var scheduled_staff = cell.textContent.substring(1).split('x')
+//       var children = cell.getElementsByTagName('span');
+//       for(var i = 0; i< scheduled_staff.length; i++) {
+//         if(scheduled_staff[i] == name) {
+//           cell.removeChild(children[i])
+//           scheduled[location].remove(name);
+//         }
+//       }
+//     }
+//     //@OVERRIDE
+//     $(function() {
+//       //Drag Employees
+//       var $employees = $("#employee-list");
+//       $("li", $employees).draggable({
+//         revert: "invalid",
+//         containment: "document",
+//         // appendTo: "body",
+//         helper: "clone",
+//         cursor: "move",
+//         cursorAt: { left: -8 }
+//       });
+//       //Drop in the .droppable classes
+//       $(".droppable").droppable({
+//         tolerance : "pointer",
+//         drop: function(event, ui) {
+//           var name = ui.draggable.text();
+//           var time = this.id;
+//           if(updateRegions(name, time)) { //Dont add if user already exists
+//             var elementHTML = '<span><button onclick="deleteItem(\'' + name + '\', \''+ time + '\');">x</button>'+name+'<br/></span>';
+//             this.innerHTML+= elementHTML;
+//           } else {
+//             //Shake div
+//              $( "#timeslot" ).effect( "shake" );
+//           }
+//         }
+//       })
+
+//     });
+
+//     //Overrides to javascript itself
+//     Array.prototype.remove = function() {
+//     var what, a = arguments, L = a.length, ax;
+//     while (L && this.length) {
+//         what = a[--L];
+//         while ((ax = this.indexOf(what)) !== -1) {
+//             this.splice(ax, 1);
+//         }
+//     }
+//     return this;
+// };
 
     </script>
     </body>
