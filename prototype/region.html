@@ -11,6 +11,7 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
@@ -22,190 +23,13 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="ico/favicon.png">
-    <!-- CUSTOM CSS -->
     <style>
-    /* Day Select */
-    #selected_date {
-      text-align: center;
-      margin: 0px 0px;
-    }
-    #employee-nav {
-      margin-top: -40px;
-    }
-    #prev-day:hover, #prev-day:focus, #next-day:hover, #next-day:focus {
-      color: rgb(0, 85, 128);
-      text-decoration: none;
-    }
-    #prev-day, #next-day {
-      color: rgb(0, 136, 204);
-      padding:3px;
-      font-size: 1.5em;
-      vertical-align: middle;
-    }
-    #day > h3 {
-      text-align: center;
-    }
-    /* Times of Day Div Styling */
-    #day > div {
-      border: 1px solid rgba(51, 51, 51, 0.15);
-      float: left;
-      margin-bottom: 10px;
-    }
-    #day > div:hover, #day > div:focus {
-      border: 1px solid rgb(0, 85, 128);
-    }
-    #day > div > h4 {
-      margin-left: 1em;
-    }
-    #day {
-      overflow-y: auto;
-      max-height: 485px;
-    }
-    div.settings {
-      background-image: url("img/settings-normal.png");
-      width: 19px; height: 20px;
-      float: right;
-      margin-right: 1em;
-    }
-    .settings:hover, .settings:focus {
-      background-image: url("img/settings-hover.png");
-      width: 19px; height: 20px;
-    }
-    .region {
-      min-height: 125px;
-    }
-    #day-footer {
-      position: relative;
-      left: 25.5%;
-      border: 0 !important;
-    }
-
-
-    /* Employee List Styling */
-    .employees {
-      min-width: 150px;
-    }
-    .employees > h4 > a:hover, .employees > h4 > a:focus {
-      text-decoration: none;
-    }
-    .horizontal-grey-line {
-      background-color: rgba(51, 51, 51, 0.3);
-      height: 1px;
-      margin: 8px 0;
-    }
-    .employees > ul, .droppable  {
-      list-style-type: none;
-      padding: 0;
-      margin-left: 0;
-    }
-    #employee-list {
-      max-height: 450px;
-      overflow: auto;
-    }
-    .employees > ul > li, .droppable > li {
-      background-color: rgb(12, 40, 73);
-      color: rgb(237, 239, 242);
-      font-size: 1.2em;
-      padding: 8px 0;
-      margin-bottom: 4px;
-      text-align: center;
-      min-width: 150px;
-    }
-    /* Searchbar styling */
-    #search-bar {
-      width: 85%;
-    }
-    /* Employee list special to scheduled employees */
-    .droppable > li > span {
-      float: left;
-      margin-left: 1em;
-      margin-right: -1em;
-      cursor: pointer;
-      font-weight: bold;
-      color: rgb(0, 136, 204);
-      font-size: 1.25em;
-      margin-top: -2px;
-    }
-    .droppable > li > span:hover, .droppable > li > span:focus {
-      color: rgb(0, 85, 128);
-      cursor: pointer;
-    }
-    /* Table Styling */
-    td.success{ background-color: rgb(223, 240, 216); }
-    td.warning { background-color: rgb(252, 248, 227); }
-    td.error   { background-color: rgb(242, 222, 222); }
-    td.info    { background-color: rgb(217, 237, 247); }
-    td { background-color: white; }
-    th { background-color: rgba(51, 51, 51, 0.04); }
-    .table-nav-day { color: #0088cc; font-size: 2.5em; vertical-align: middle !important; border: 0 !important; background-color: white; }
-
-    /* Fix border */
-    .table-bordered { border: 0; }
-    #week-view th { border-top: 1px solid #dddddd; }
-    #week-view td { border-bottom: 1px solid #dddddd; }
-    .last-day { border-right: 1px solid #dddddd; }
-    .table-nav-day:hover, .table-nav-day:focus { color: #005580;  background-color: white; }
-    th:hover { color: white; background-color: #005580; }
-    .table td, .table th {
-      text-align: center;
-    }
-
-    .table-bordered thead:last-child tr:last-child > th:first-child, .table-bordered tbody:last-child tr:last-child > td:first-child, .table-bordered tbody:last-child tr:last-child > th:first-child, .table-bordered tfoot:last-child tr:last-child > td:first-child, .table-bordered tfoot:last-child tr:last-child > th:first-child {
-      -webkit-border-bottom-left-radius: 0px;
-      border-bottom-left-radius: 0px;
-      -moz-border-radius-bottomleft: 0px;
-    }
-
-    .table-bordered thead:last-child tr:last-child > th:last-child, .table-bordered tbody:last-child tr:last-child > td:last-child, .table-bordered tbody:last-child tr:last-child > th:last-child, .table-bordered tfoot:last-child tr:last-child > td:last-child, .table-bordered tfoot:last-child tr:last-child > th:last-child {
-      -webkit-border-bottom-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-      -moz-border-radius-bottomright: 0px;
-    }
-
-    /* Button Override */
-    .btn-primary { background-color: #0088cc; background-image: none; border-radius: 1.5px; }
-    .btn-primary:hover, .btn-primary:focus { background-color: #005580; }
-    /* Dotted Box - Droppables*/
-    .droppable { 
-      padding: 8px 0;
-      margin: 10px 10px 0px;
-    }
-    .droppable {
-      border: 2px dashed rgba(51, 51, 51, 0.15);
-      background-color: rgba(51, 51, 51, 0.04);
-    }
-    .droppable > div {
-      font-size: 1.1em;
-      font-weight: bold;
-      text-align: center;
-      color: rgba(51, 51, 51, 0.65);  
-      margin-bottom: 5px; 
-    }
-    .otherStaff {
-      padding: 10px 0 40px;
-      margin: 10px 10px 10px;
-    }
-    /* Fix navbar to flat */
-    .navbar-inner {
-      -webkit-border-radius: 0px;
-      -moz-border-radius: 0px;
-      border-radius: 0px;
-      background-color: rgba(51, 51, 51, 0.04);
-      background-image: none;
-      border: 0px;
-      border-bottom: 1px solid rgba(51,51,51,0.15); /* Just bottom border */
-    }
-    /* fIX INPUT BORDER */
-    input {
-      -webkit-border-radius: 0px !important;
-      -moz-border-radius: 0px !important;
-      border-radius: 0px !important;
-    }
-    @media (min-width: 1200px) {
-      input {
-        width: 155px !important;
+    /* Make the 'other stuff' 
+     div wider than the rest */
+      .otherStaff {
+        padding: 10px 0 40px;
+        margin: 10px 10px 10px;
       }
-    }
     </style>
     <body>
        <div class="navbar">
@@ -228,7 +52,7 @@
       <div class="row">
         <div class="span12">
         <table id="week-view" class="table table-bordered table-condensed">
-            <tr>
+            <tr class="hoverable">
               <th onclick="changeDay(-1);" class="table-nav-day" rowspan="2"> &lt; </th>
               <th class="btn-primary" onclick="changeDay(0);">Monday 1/2/2013</th>
               <th onclick="changeDay(1);">Tuesday 1/3/2013</th>
@@ -240,13 +64,13 @@
               <th onclick="changeDay(7);" class="table-nav-day" rowspan="2"> &gt;</th>
             </tr>
             <tr>
-              <td onclick="changeDay(0);" class=""><i class="icon-user"></i>11</td>
-              <td onclick="changeDay(1);" class=""><i class="icon-user"></i>9</td>
-              <td onclick="changeDay(2);" class="error"><i class="icon-user"></i>5</td>
-              <td onclick="changeDay(3);" class=""><i class="icon-user"></i>10</td>
-              <td onclick="changeDay(4);" class=""><i class="icon-user"></i>20</td>
-              <td onclick="changeDay(5);" class=""><i class="icon-user"></i>18</td>
-              <td onclick="changeDay(6);" class="last-day"><i class="icon-user"></i>29</td>
+              <td onclick="changeDay(0);" class=""><i class="icon-user"></i>130</td>
+              <td onclick="changeDay(1);" class=""><i class="icon-user"></i>129</td>
+              <td onclick="changeDay(2);" class="error"><i class="icon-user"></i>60</td>
+              <td onclick="changeDay(3);" class=""><i class="icon-user"></i>130</td>
+              <td onclick="changeDay(4);" class=""><i class="icon-user"></i>200</td>
+              <td onclick="changeDay(5);" class=""><i class="icon-user"></i>123</td>
+              <td onclick="changeDay(6);" class="last-day"><i class="icon-user"></i>143 </td>
             </tr>
           </tbody>
         </table>
@@ -328,10 +152,10 @@
             </ul>
           </div>
           <!-- END TIMESLOTS -->
-        </div>
-      <div id="day-footer" class="span10">
+          <div id="day-footer" class="span9">
             <button onclick="addRegion();" class="btn btn-primary">Add New Region</button>
-      </div>
+          </div>
+        </div>
     </div>
      <!-- Le javascript
     ================================================== -->
