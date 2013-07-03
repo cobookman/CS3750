@@ -84,7 +84,7 @@
           <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
         </h3>
         <div id="employee-nav" class="span2 employees">
-          <h4>Employees <a href="#add-employee" onclick="newEmployee();">+</a></h4>
+          <h4>Employees <a href="#newEmployee" data-toggle="modal" role="button">+</a></h4>
           <input id="search-bar" type="text" placeholder="search">
           <div class="horizontal-grey-line"></div>
           <ul id="employee-list">
@@ -153,10 +153,69 @@
           </div>
           <!-- END TIMESLOTS -->
           <div id="day-footer" class="span9">
-            <button onclick="addRegion();" class="btn btn-primary">Add New Region</button>
+            <a href="#newRegion" class="btn btn-primary" data-toggle="modal" role="button">Add New Region</a>
           </div>
         </div>
     </div>
+
+
+    <!-- New Region Modal -->
+      <div id="newRegion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newRegion" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3>Add New Time Slot</h3>
+        </div>
+        <div class="modal-body">
+          <fieldset>
+            <label>Name</label>
+            <input id="regionName" type="text">
+            <label>Position</label>
+            <input id="position1" type="text">
+            <button> + </button>
+            <label>Duration</label>
+            <label class="radio">
+              <input name="date-range" id="today" type="radio"> Today
+            </label>
+            <label class="radio">
+              <input name="date-range" id="week" type="radio"> Week
+            </label>
+            <label class="radio">
+              <input name="date-range" id="forever" type="radio"> Forever
+            </label>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" data-dismiss="modal" onclick="addRegion();">Save changes</button>
+        </div>
+      </div>
+    <!-- New Employee Modal -->
+      <div id="newEmployee" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newRegion" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3>Add New Employee</h3>
+        </div>
+        <div class="modal-body">
+          <fieldset>
+            <label>Staff Name</label>
+            <input id="regionName" type="text" placeholder="first last">
+            <label>Type</label>
+            <label class="radio">
+              <input name="date-range" id="volunteer" type="radio"> Volunteer
+            </label>
+            <label class="radio">
+              <input name="date-range" id="full" type="radio"> Full-Time
+            </label>
+            <label class="radio">
+              <input name="date-range" id="part" type="radio"> Part-TIme
+            </label>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" data-dismiss="modal" onclick="newEmployee();">Save changes</button>
+        </div>
+      </div>
      <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
