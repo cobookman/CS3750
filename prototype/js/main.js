@@ -28,6 +28,18 @@
       }
     });
   }
+  /* Employe Profile Trigger */
+  function initEmployeeProfile() {
+    $(".droppable, .ui-draggable").bind('dblclick', function(event) {
+        var name = event.target.textContent.substring(1);
+        if(event.target.classList.contains('ui-draggable')) {
+          name = event.target.textContent;
+        }
+        if(event.target.tagName.toLowerCase() == 'li') {
+          alert("To Be Implemented: Employee Profile would be displayed for:\n" + name);
+        }
+      });
+  }
 /* scheduleEmployee(name, location, position) - position optional*/
   function scheduleEmployee(name, location, position) {
     /* return a false if employee already schedule in location */

@@ -88,26 +88,26 @@
           <input id="search-bar" type="text" placeholder="search">
           <div class="horizontal-grey-line"></div>
           <ul id="employee-list">
-            <li>Colin Bookman</li>
+             <li>Colin Bookman</li>
             <li>Bob Dylan</li>
             <li>James Tight</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
-            <li>Colin Bookman</li>
+            <li>Bob Dynal</li>
+            <li>John Verrone</li>
+            <li>Mary-Ann</li>
+            <li>Christopher Bosh</li>
+            <li>Timmothy Boob</li>
+            <li>Brittiny Spears</li>
+            <li>Sparlkes Star</li>
+            <li>Peach Mercades</li>
+            <li>Porshe Cammy</li>
+            <li>Ruby Red</li>
           </ul>
         </div>
         
         <div id="day" class="offset2">
           <!-- Time Slots -->
           <div id="region1" class="span3 region">
-            <h4>Region 1 <div class="settings" onclick="settings('morning');"></div></h4> 
+            <h4>Region 1 <div class="settings"></div></h4> 
             <ul class="droppable captain">
               <div>Captain</div>
             </ul>
@@ -227,6 +227,26 @@
       var curr_date = new Date(2013, 0, 2);
       initDraggable();
       initDroppable();
+      initEmployeeProfile();
+      function toCaptain(region, time) {
+
+        alert("Navigating to captain view for: "+time+" - "+region);
+      }
+      $(".region").bind("dblclick", function(event) {
+        var type = event.target.tagName.toLowerCase();
+        if(type == 'li') {
+          
+        } else { //Trig nav to sub element
+          var elm = event.target;
+          while(!elm.classList.contains('region')) {
+            elm = elm.parentElement;
+          }
+          alert("Navigating to Captain view for: " + elm.id);
+        }        
+      });
+      
+
+
     </script>
     </body>
 </html>
