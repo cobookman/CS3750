@@ -55,7 +55,7 @@
         text-align: left;
       }
     </style>
-    <body>
+    <body id="heatmapArea">
     <div class="navbar">
       <div class="navbar-inner">
         <a class="brand" href=".">Ink</a>
@@ -66,6 +66,7 @@
         </ul>
         <ul class="nav pull-right">
           <li><a href="#">Logout</a></li>
+          <li onclick="heatmap.toggleDisplay();"><a href="#">DONT CLICK</a></li>
         </ul>
       </div>
     </div>
@@ -102,7 +103,7 @@
       <div class="row">
         <h3 id="selected_date">
           <a onclick="changeDay(-1);" href="#prev-day" id="prev-day">&lt;</a>
-           Region 1
+           Region 2 - Bob
           <a onclick="changeDay(1);" id="next-day" href="#next-day">&gt;</a>
         </h3>
         <div id="employee-nav" class="span2 employees">
@@ -132,7 +133,7 @@
               <thead>
                 <tr id="position-header">
                   <th>Monday<br/>1/2/2013</th>
-                  <th>River<br/>Scount</th>
+                  <th>River<br/>Scout</th>
                   <th>Tropical<br/>Diver</th>
                   <th>Dolphin<br/>Tales</th>
                   <th>Other<br/>Position 1</th>
@@ -279,6 +280,83 @@
           }
         }
       });
+
+      //TEST CASE
+      $(document).ready(function() {
+        $("#7-1").html('<span><button onclick="unscheduleEmployee(\'Colin Bookman\', \'7-1\');">x</button>Colin Bookman<br></span>');
+         $("#7-2").html('<span><button onclick="unscheduleEmployee(\'James Tight\', \'7-2\');">x</button>James Tight<br></span>');
+      });
     </script>
+
+
+    <script src="js/heatmap/heatmap.js"></script>
+    <script>
+    //Heatmap 
+// heatmap configuration
+    var config = {
+    element: document.getElementById("heatmapArea"),
+    radius: 30,
+    opacity: 50,
+    // legend: {
+    // position: 'br',
+    // title: 'Mouse Movement Distribution'
+    // }
+    };
+//creates and initializes the heatmap
+var heatmap = h337.create(config);
+ 
+var active = true,
+idle = false,
+over = false,
+x = 0,
+y = 0,
+simulate = false;
+ 
+// activate capture mode
+setInterval(function(){
+active = true;
+}, 80);
+ 
+// check whether the mouse is idling
+var idlechecker = setInterval(function(){
+if(over && !simulate){
+// if it's idling -> start the simulation
+// and add the last x/y coords
+simulate = setInterval(function(){
+heatmap.store.addDataPoint(x, y, 1);
+}, 1000);
+}
+}, 150);
+var add = function(e){
+x = e.layerX;
+y = e.layerY
+heatmap.store.addDataPoint(x, y, 1);
+};
+ 
+var element = document.getElementById("heatmapArea");
+ 
+element.onmousemove = function(e){
+over = true;
+if(simulate){
+clearInterval(simulate);
+simulate = false;
+}
+ 
+if(active){
+add(e);
+active = false;
+}
+};
+element.onclick = function(e){
+add(e);
+};
+element.onmouseout = function(){
+over = false;
+};
+heatmap.toggleDisplay();
+
+    </script>
+
+
     </body>
 </html>

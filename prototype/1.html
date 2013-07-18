@@ -31,7 +31,7 @@
         margin: 10px 10px 10px;
       }
     </style>
-    <body id="heatmapArea">
+    <body>
        <div class="navbar">
         <div class="navbar-inner">
           <a class="brand" href=".">Ink</a>
@@ -42,7 +42,6 @@
           </ul>
           <ul class="nav pull-right">
             <li><a href="#">Logout</a></li>
-            <li onclick="heatmap.toggleDisplay();"><a href="#">DONT CLICK</a></li>
           </ul>
         </div>
       </div>
@@ -144,11 +143,9 @@
             </ul>
             <ul class="droppable tour">
               <div>Tour Guide</div>
-              <li><span onclick="unscheduleEmployee('Ruby Red', 'region3');">x</span>Ruby Red</li>
             </ul>
             <ul class="droppable vip">
               <div>VIP</div>
-              <li><span onclick="unscheduleEmployee('Porshe Cammy', 'region3');">x</span>Porshe Cammy</li>
             </ul>
             <ul class="droppable otherStaff">
               <div>Other Staff</div>
@@ -244,76 +241,11 @@
           while(!elm.classList.contains('region')) {
             elm = elm.parentElement;
           }
-          document.location = 'captain.html#' + elm.id;
-          // alert("Navigating to Captain view for: " + elm.id);
+          alert("Navigating to Captain view for: " + elm.id);
         }        
       });
-    </script>
-    <script src="js/heatmap/heatmap.js"></script>
-    <script>
-    //Heatmap 
-// heatmap configuration
-    var config = {
-    element: document.getElementById("heatmapArea"),
-    radius: 30,
-    opacity: 50,
-    // legend: {
-    // position: 'br',
-    // title: 'Mouse Movement Distribution'
-    // }
-    };
-//creates and initializes the heatmap
-var heatmap = h337.create(config);
- 
-var active = true,
-idle = false,
-over = false,
-x = 0,
-y = 0,
-simulate = false;
- 
-// activate capture mode
-setInterval(function(){
-active = true;
-}, 80);
- 
-// check whether the mouse is idling
-var idlechecker = setInterval(function(){
-if(over && !simulate){
-// if it's idling -> start the simulation
-// and add the last x/y coords
-simulate = setInterval(function(){
-heatmap.store.addDataPoint(x, y, 1);
-}, 1000);
-}
-}, 150);
-var add = function(e){
-x = e.layerX;
-y = e.layerY
-heatmap.store.addDataPoint(x, y, 1);
-};
- 
-var element = document.getElementById("heatmapArea");
- 
-element.onmousemove = function(e){
-over = true;
-if(simulate){
-clearInterval(simulate);
-simulate = false;
-}
- 
-if(active){
-add(e);
-active = false;
-}
-};
-element.onclick = function(e){
-add(e);
-};
-element.onmouseout = function(){
-over = false;
-};
-heatmap.toggleDisplay();
+      
+
 
     </script>
     </body>
